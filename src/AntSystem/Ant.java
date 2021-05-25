@@ -50,12 +50,13 @@ public class Ant implements Runnable {
             // Define the next node as current node
             currentVertex = nextVertex;
         }
+        tour.add(tour.get(0));
         computeTourLength();
     }
 
     private void computeTourLength() {
         for (int i = 0; i < tour.size() - 1; i++) {
-            tourLength += as.graph.getDistance(i, i + 1);
+            tourLength += as.graph.getDistance(tour.get(i), tour.get(i + 1));
         }
     }
 
@@ -73,7 +74,7 @@ public class Ant implements Runnable {
 
         double[] probability = new double[as.graph.getNumOfVertices()];
         double sumProbability = 0.0;
-        for (Integer j : notVisitedVertices) {
+        for (int j : notVisitedVertices) {
             probability[j] = (tij[j] * nij[j]) / sum;
             sumProbability += probability[j];
         }
@@ -83,10 +84,7 @@ public class Ant implements Runnable {
     }
 
     private int rouletteWheelSelection(double[] probability, double sumProbability) {
-        //todo rand.nextDouble(), wenn seed nicht mehr benötigt
-        Random rand = new Random();
-        rand.setSeed(2);
-        double randNum = rand.nextDouble() * sumProbability;    // random number in range 0...sumProbability
+        double randNum = new Random().nextDouble() * sumProbability;    // random number in range 0...sumProbability
         int selection = 0;
         double accumulatedProbability = probability[selection];
         while (accumulatedProbability < randNum) {

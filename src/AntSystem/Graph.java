@@ -41,8 +41,8 @@ public class Graph {
     private void initializePheromoneMatrix() {
         for (int i = 0; i < numOfVertices; i++) {
             for (int j = i + 1; j < numOfVertices; j++) {
-                pheromoneMatrix[i][j] = 0.1;
-                pheromoneMatrix[j][i] = 0.1;
+                pheromoneMatrix[i][j] = initialTau;
+                pheromoneMatrix[j][i] = initialTau;
             }
         }
     }

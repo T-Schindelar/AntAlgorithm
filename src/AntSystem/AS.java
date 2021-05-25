@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AS {
     private static final double Q = 1.0;
@@ -70,19 +68,18 @@ public class AS {
     }
 
 
-    public void printMatrix(double[][] matrix) {
-        for (int i = 0; i < graph.getNumOfVertices(); i++) {
-            System.out.println(Arrays.toString(matrix[i]));
-        }
+    public static void printMatrix(double[][] matrix) {
+        for (double[] row : matrix)
+            System.out.println(Arrays.toString(row));
         System.out.println();
     }
 
-    static public Vertex[] createRandomVertices(int n) {
+    static public Vertex[] createRandomVertices(int n, int ub) {
         Vertex[] v = new Vertex[n];
         Random rand = new Random();
         rand.setSeed(0);
         for (int i = 0; i < n; i++)
-            v[i] = new Vertex(rand.nextInt(11), rand.nextInt(11));
+            v[i] = new Vertex(rand.nextInt(ub + 1), rand.nextInt(ub + 1));
         return v;
     }
 
@@ -110,22 +107,15 @@ public class AS {
     }
 
     private void buildAntsSolutions() {
-        ExecutorService executor = Executors.newFixedThreadPool(numberOfAnts);
-        //Build the ant solutions by using threads
-        for (Ant ant : ants) {
-            executor.execute(ant);
-        }
-        executor.shutdown();
-
-        //Wait until all ants finishes their tours
-        while (!executor.isTerminated()){}
+        for (Ant ant : ants)
+            ant.run();
     }
 
     private void updatePheromones() {
         for (int i = 0; i < graph.getNumOfVertices(); i++) {
             for (int j = i + 1; j < graph.getNumOfVertices(); j++) {
                 // Do Evaporation
-                graph.setTau(i, j, (1 - rho) * getDeltaTau(i, j));
+                graph.setTau(i, j, (1 - rho) * graph.getTau(i, j));
                 graph.setTau(j, i, graph.getTau(i, j));
 
                 // Do Deposit
@@ -163,14 +153,20 @@ public class AS {
     }
 
     public static void main(String[] args) {
-        AS as = new AS(createRandomVertices(10), 2);
+        AS as = new AS(createRandomVertices(10, 100), 10);
+//        printMatrix(as.graph.distanceMatrix);
         as.setNumberOfIterations(1000);
         as.setAlpha(1.0);
         as.setBeta(1.0);
         as.setRho(0.01);
+        long start = System.currentTimeMillis();
         as.solve();
+        long finish = System.currentTimeMillis();
+        long compTime = finish - start;
+
         System.out.println(Arrays.toString(as.bestTour));
         System.out.println(as.bestTourValue);
+        System.out.printf("compTime: %f ms", compTime / 1000.0);
     }
 
 }
