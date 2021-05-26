@@ -6,39 +6,60 @@ import java.util.List;
 import java.util.Random;
 
 public class AS {
-    /** Q: a constant related to the quantity of trail laid by ants. */
+    /**
+     * Q: a constant related to the quantity of trail laid by ants.
+     */
     private static final double Q = 1.0;
 
-    /** Alpha: the relative importance of the trail. */
+    /**
+     * Alpha: the relative importance of the trail.
+     */
     private double alpha = 1.0;
 
-    /** Beta: the relative importance of the visibility. */
+    /**
+     * Beta: the relative importance of the visibility.
+     */
     private double beta = 1.0;
 
-    /** Rho: trail persistence(1-ρ can be interpreted as trail evaporation). */
+    /**
+     * Rho: trail persistence(1-ρ can be interpreted as trail evaporation).
+     */
     private double rho = 0.1;
 
-    /** Number of Iterations. */
+    /**
+     * Number of Iterations.
+     */
     private int numberOfIterations = 1000;
 
-    /** The graph which represents the environment. */
+    /**
+     * The graph which represents the environment.
+     */
     protected Graph graph;
 
-    /** Number of ants. */
+    /**
+     * Number of ants.
+     */
     private final int numberOfAnts;
 
-    /** The ants of the Ant System. */
+    /**
+     * The ants of the Ant System.
+     */
     private final Ant[] ants;
 
-    /** The position of each ant. */
+    /**
+     * The position of each ant.
+     */
     private int[] antPositions;
 
-    /** The best tour found. */
+    /**
+     * The best tour found.
+     */
     private int[] bestTour;
 
-    /** The length of the best tour */
+    /**
+     * The length of the best tour
+     */
     private double bestTourLength;
-
 
     public AS(Vertex[] vertices, int numberOfAnts) {
         this.graph = new Graph(vertices);
@@ -48,7 +69,6 @@ public class AS {
         initializeAnts();
         initializeAntPositions();
     }
-
 
     /**
      * @return the value of Q
@@ -157,7 +177,7 @@ public class AS {
     /**
      * Returns a Vertex[] with n randomly distributed vertices in a 2D grid from 0 to upper bound.
      *
-     * @param n number of vertices
+     * @param n  number of vertices
      * @param ub upper bound for the grid
      * @return a Vertex[] with n randomly distributed vertices
      */
@@ -170,21 +190,24 @@ public class AS {
         return v;
     }
 
-    /** Initializes the ants. */
+    /**
+     * Initializes the ants.
+     */
     private void initializeAnts() {
         for (int k = 0; k < numberOfAnts; k++) {
             ants[k] = new Ant(this, k);
         }
     }
 
-    /** Initializes the starting position for each ant. */
+    /**
+     * Initializes the starting position for each ant.
+     */
     private void initializeAntPositions() {
         antPositions = new int[numberOfAnts];
         for (int i = 0; i < numberOfAnts; i++) {
             antPositions[i] = i % graph.getNumOfVertices();
         }
     }
-
 
     /**
      * Initializes the not visited vertices for each ant.
@@ -201,14 +224,17 @@ public class AS {
         return notVisitedVertices;
     }
 
-
-    /** Forces every ant to construct a solution. */
+    /**
+     * Forces every ant to construct a solution.
+     */
     private void constructAntsSolutions() {
         for (Ant ant : ants)
             ant.run();
     }
 
-    /** Updates the pheromones. */
+    /**
+     * Updates the pheromones.
+     */
     private void updatePheromones() {
         for (int i = 0; i < graph.getNumOfVertices(); i++) {
             for (int j = i + 1; j < graph.getNumOfVertices(); j++) {
@@ -222,7 +248,6 @@ public class AS {
             }
         }
     }
-
 
     /**
      * Returns the computed delta tau value oder all ants.
@@ -241,7 +266,9 @@ public class AS {
         return deltaTau;
     }
 
-    /** Updates the best solution. */
+    /**
+     * Updates the best solution.
+     */
     private void updateSolution() {
         for (Ant ant : ants) {
             if (bestTourLength == 0 || ant.tourLength < bestTourLength) {
@@ -251,7 +278,9 @@ public class AS {
         }
     }
 
-    /** Solves the Problem. */
+    /**
+     * Solves the Problem.
+     */
     public void solve() {
         for (int i = 0; i < numberOfIterations; i++) {
             constructAntsSolutions();

@@ -1,20 +1,32 @@
 package AntSystem;
 
-/** Graph represents the environment for the Ant System. */
+/**
+ * Graph represents the environment for the Ant System.
+ */
 public class Graph {
-    /** Number of vertices. */
+    /**
+     * Number of vertices.
+     */
     private final int numOfVertices;
 
-    /** Vertices of the graph. */
+    /**
+     * Vertices of the graph.
+     */
     protected final Vertex[] vertices;
 
-    /** Distance matrix of the graph. */
+    /**
+     * Distance matrix of the graph.
+     */
     protected final double[][] distanceMatrix;
 
-    /** Pheromone matrix of the graph. */
+    /**
+     * Pheromone matrix of the graph.
+     */
     private final double[][] pheromoneMatrix;
 
-    /** The initial tau value for the pheromone matrix. */
+    /**
+     * The initial tau value for the pheromone matrix.
+     */
     private final double initialTau;
 
     /**
@@ -22,7 +34,7 @@ public class Graph {
      *
      * @param vertices vertices to build the graph
      */
-     public Graph(Vertex[] vertices) {
+    public Graph(Vertex[] vertices) {
         this.vertices = vertices;
         this.numOfVertices = vertices.length;
         this.distanceMatrix = new double[numOfVertices][numOfVertices];
@@ -35,7 +47,7 @@ public class Graph {
     /**
      * Constructor.
      *
-     * @param vertices vertices to build the graph
+     * @param vertices   vertices to build the graph
      * @param initialTau initial tau value for the pheromone matrix
      */
     public Graph(Vertex[] vertices, double initialTau) {
@@ -48,7 +60,9 @@ public class Graph {
         initializePheromoneMatrix();
     }
 
-    /** Initialize the distance matrix, using euclidean distances. */
+    /**
+     * Initialize the distance matrix, using euclidean distances.
+     */
     private void initializeDistanceMatrix() {
         double distance;
         for (int i = 0; i < numOfVertices; i++) {
@@ -60,7 +74,9 @@ public class Graph {
         }
     }
 
-    /** Initialize pheromone matrix with the initial tau */
+    /**
+     * Initialize pheromone matrix with the initial tau
+     */
     private void initializePheromoneMatrix() {
         for (int i = 0; i < numOfVertices; i++) {
             for (int j = i + 1; j < numOfVertices; j++) {
@@ -72,6 +88,7 @@ public class Graph {
 
     /**
      * Returns the distance for the edge(i,j).
+     *
      * @param i the current vertex
      * @param j the next vertex
      * @return distance for the edge(i,j)
@@ -94,8 +111,8 @@ public class Graph {
     /**
      * Sets a new pheromone value for the edge(i,j).
      *
-     * @param i the current vertex
-     * @param j the next vertex
+     * @param i     the current vertex
+     * @param j     the next vertex
      * @param value the new pheromone value for the edge(i,j)
      */
     public void setTau(int i, int j, double value) {

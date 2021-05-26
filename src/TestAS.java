@@ -5,11 +5,11 @@ import java.util.Arrays;
 public class TestAS {
     public static void main(String[] args) {
         // initialize the Ant System
-        AS as = new AS(AS.createRandomVertices(10, 100), 10);
+        AS as = new AS(AS.createRandomVertices(800, 100), 800);
         // printMatrix(as.graph.distanceMatrix);
 
         // set parameter
-        as.setNumberOfIterations(1000);
+        as.setNumberOfIterations(1);
         as.setAlpha(1.0);
         as.setBeta(1.0);
         as.setRho(0.01);

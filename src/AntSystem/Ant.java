@@ -4,27 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/** Ant for the Ant System. */
+/**
+ * Ant for the Ant System.
+ */
 public class Ant implements Runnable {
-    /** The Ant System (AS) in which the ant lives. */
+    /**
+     * The Ant System (AS) in which the ant lives.
+     */
     public AS as;
 
-    /** Identifier for the ant. */
+    /**
+     * Identifier for the ant.
+     */
     protected int id;
 
-    /** Current vertex. */
+    /**
+     * Current vertex.
+     */
     public int currentVertex;
 
-    /** The List of not visited vertices. */
+    /**
+     * The List of not visited vertices.
+     */
     public List<Integer> notVisitedVertices;
 
-    /** The traveled path of the ant. */
+    /**
+     * The traveled path of the ant.
+     */
     public int[][] path;
 
-    /** The created Tour of the ant. */
+    /**
+     * The created Tour of the ant.
+     */
     private final List<Integer> tour;
 
-    /** The lenght of the tour. */
+    /**
+     * The lenght of the tour.
+     */
     protected double tourLength;
 
     /**
@@ -41,7 +57,9 @@ public class Ant implements Runnable {
         this.path = new int[as.graph.getNumOfVertices()][as.graph.getNumOfVertices()];
     }
 
-    /** Resets the ant to the starting values. */
+    /**
+     * Resets the ant to the starting values.
+     */
     public void reset() {
         this.currentVertex = as.getAntPosition(id);
         this.tourLength = 0.0;
@@ -51,7 +69,9 @@ public class Ant implements Runnable {
         this.path = new int[as.graph.getNumOfVertices()][as.graph.getNumOfVertices()];
     }
 
-    /** Construct the tour for the ant. */
+    /**
+     * Construct the tour for the ant.
+     */
     public void explore() {
         // exploration ends when their is no more vertex to visit
         while (!notVisitedVertices.isEmpty()) {
@@ -78,7 +98,9 @@ public class Ant implements Runnable {
         computeTourLength();
     }
 
-    /** Computes the length of the tour. */
+    /**
+     * Computes the length of the tour.
+     */
     private void computeTourLength() {
         for (int i = 0; i < tour.size() - 1; i++) {
             tourLength += as.graph.getDistance(tour.get(i), tour.get(i + 1));
@@ -117,7 +139,7 @@ public class Ant implements Runnable {
     /**
      * Returns an integer which represents the chosen vertex.
      *
-     * @param probability a double array with the probability of each vertex
+     * @param probability    a double array with the probability of each vertex
      * @param sumProbability the sum of the probabilities
      * @return the selected vertex
      */
