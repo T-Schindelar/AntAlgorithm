@@ -126,6 +126,17 @@ public class AS {
     }
 
     /**
+     * Sets the new initial tau value for the graph.
+     *
+     * @param initialTau the new initial tau value
+     */
+    public void setInitialTau(double initialTau) {
+        graph.setInitialTau(initialTau);
+    }
+
+
+
+    /**
      * @return the number of iterations
      */
     public int getNumberOfIterations() {
@@ -194,9 +205,8 @@ public class AS {
      * Initializes the ants.
      */
     private void initializeAnts() {
-        for (int k = 0; k < numberOfAnts; k++) {
+        for (int k = 0; k < numberOfAnts; k++)
             ants[k] = new Ant(this, k);
-        }
     }
 
     /**
@@ -204,9 +214,8 @@ public class AS {
      */
     private void initializeAntPositions() {
         antPositions = new int[numberOfAnts];
-        for (int i = 0; i < numberOfAnts; i++) {
+        for (int i = 0; i < numberOfAnts; i++)
             antPositions[i] = i % graph.getNumOfVertices();
-        }
     }
 
     /**

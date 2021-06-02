@@ -5,14 +5,15 @@ import java.util.Arrays;
 public class TestAS {
     public static void main(String[] args) {
         // initialize the Ant System
-        AS as = new AS(AS.createRandomVertices(800, 100), 800);
+        AS as = new AS(AS.createRandomVertices(100, 100), 100);
         // printMatrix(as.graph.distanceMatrix);
 
         // set parameter
-        as.setNumberOfIterations(1);
+        as.setNumberOfIterations(1000);
         as.setAlpha(1.0);
         as.setBeta(1.0);
         as.setRho(0.01);
+        as.setInitialTau(0.01);
 
         // solve and measure time
         long start = System.currentTimeMillis();

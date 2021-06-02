@@ -27,7 +27,7 @@ public class Graph {
     /**
      * The initial tau value for the pheromone matrix.
      */
-    private final double initialTau;
+    private double initialTau = 0.1;
 
     /**
      * Constructor.
@@ -39,25 +39,8 @@ public class Graph {
         this.numOfVertices = vertices.length;
         this.distanceMatrix = new double[numOfVertices][numOfVertices];
         this.pheromoneMatrix = new double[numOfVertices][numOfVertices];
-        this.initialTau = 0.1;
         initializePheromoneMatrix();
         initializeDistanceMatrix();
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param vertices   vertices to build the graph
-     * @param initialTau initial tau value for the pheromone matrix
-     */
-    public Graph(Vertex[] vertices, double initialTau) {
-        this.vertices = vertices;
-        this.numOfVertices = vertices.length;
-        this.distanceMatrix = new double[numOfVertices][numOfVertices];
-        initializeDistanceMatrix();
-        this.initialTau = initialTau;
-        this.pheromoneMatrix = new double[numOfVertices][numOfVertices];
-        initializePheromoneMatrix();
     }
 
     /**
@@ -126,5 +109,24 @@ public class Graph {
      */
     public int getNumOfVertices() {
         return numOfVertices;
+    }
+
+    /**
+     * Return the value of the initial tau.
+     *
+     * @return the value of the initial tau
+     */
+    public double getInitialTau() {
+        return initialTau;
+    }
+
+    /**
+     * Sets the new tau value and initializes the pheromone matrix with this value
+     *
+     * @param initialTau the new initial tau value
+     */
+    public void setInitialTau(double initialTau) {
+        this.initialTau = initialTau;
+        initializePheromoneMatrix();
     }
 }
