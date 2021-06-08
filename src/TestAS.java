@@ -2,6 +2,9 @@ import AntSystem.AS;
 
 import java.util.Arrays;
 
+/**
+ * Test the Ant System.
+ */
 public class TestAS {
     public static void main(String[] args) {
         // initialize the Ant System

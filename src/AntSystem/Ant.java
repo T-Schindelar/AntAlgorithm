@@ -9,14 +9,14 @@ import java.util.Random;
  */
 public class Ant implements Runnable {
     /**
+     * The created Tour of the ant.
+     */
+    private final List<Integer> tour;
+
+    /**
      * The Ant System (AS) in which the ant lives.
      */
     public AS as;
-
-    /**
-     * Identifier for the ant.
-     */
-    protected int id;
 
     /**
      * Current vertex.
@@ -34,9 +34,9 @@ public class Ant implements Runnable {
     public int[][] path;
 
     /**
-     * The created Tour of the ant.
+     * Identifier for the ant.
      */
-    private final List<Integer> tour;
+    protected int id;
 
     /**
      * The lenght of the tour.
@@ -46,8 +46,8 @@ public class Ant implements Runnable {
     /**
      * Constructor.
      *
-     * @param as the instance of the Ant System (AS) in which the ant lives
-     * @param id the id for the ant
+     * @param as The instance of the Ant System (AS) in which the ant lives.
+     * @param id The id for the ant.
      */
     public Ant(AS as, int id) {
         this.id = id;
@@ -70,7 +70,7 @@ public class Ant implements Runnable {
     }
 
     /**
-     * Construct the tour for the ant.
+     * Construct the tour of the ant.
      */
     public void explore() {
         // exploration ends when their is no more vertex to visit
@@ -110,7 +110,7 @@ public class Ant implements Runnable {
     /**
      * Returns an integer which represents the next selected vertex from the not visited vertices list.
      *
-     * @return the next selected vertex
+     * @return The next selected vertex.
      */
     private int selectNextVertex() {
         double[] tij = new double[as.graph.getNumOfVertices()];     // pheromone intensity
@@ -139,9 +139,9 @@ public class Ant implements Runnable {
     /**
      * Returns an integer which represents the chosen vertex.
      *
-     * @param probability    a double array with the probability of each vertex
-     * @param sumProbability the sum of the probabilities
-     * @return the selected vertex
+     * @param probability    A double array with the probability of each vertex.
+     * @param sumProbability The sum of the probabilities.
+     * @return The selected vertex.
      */
     private int rouletteWheelSelection(double[] probability, double sumProbability) {
         double randNum = new Random().nextDouble() * sumProbability;    // random number in range 0...sumProbability
@@ -157,12 +157,15 @@ public class Ant implements Runnable {
     /**
      * Convert the ant tour to an integer array.
      *
-     * @return the tour as an int[]
+     * @return The tour as an int[].
      */
     public int[] getTour() {
         return tour.stream().mapToInt(i -> i).toArray();
     }
 
+    /**
+     * Construct a tour for the ant.
+     */
     @Override
     public void run() {
         reset();

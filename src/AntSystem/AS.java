@@ -5,47 +5,42 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Ant System to solve VRPs.
+ */
 public class AS {
     /**
      * Q: a constant related to the quantity of trail laid by ants.
      */
     private static final double Q = 1.0;
-
-    /**
-     * Alpha: the relative importance of the trail.
-     */
-    private double alpha = 1.0;
-
-    /**
-     * Beta: the relative importance of the visibility.
-     */
-    private double beta = 1.0;
-
-    /**
-     * Rho: trail persistence(1-ρ can be interpreted as trail evaporation).
-     */
-    private double rho = 0.1;
-
-    /**
-     * Number of Iterations.
-     */
-    private int numberOfIterations = 1000;
-
-    /**
-     * The graph which represents the environment.
-     */
-    protected Graph graph;
-
     /**
      * Number of ants.
      */
     private final int numberOfAnts;
-
     /**
      * The ants of the Ant System.
      */
     private final Ant[] ants;
-
+    /**
+     * The graph which represents the environment.
+     */
+    protected Graph graph;
+    /**
+     * Alpha: the relative importance of the trail.
+     */
+    private double alpha = 1.0;
+    /**
+     * Beta: the relative importance of the visibility.
+     */
+    private double beta = 1.0;
+    /**
+     * Rho: trail persistence(1-ρ can be interpreted as trail evaporation).
+     */
+    private double rho = 0.1;
+    /**
+     * Number of Iterations.
+     */
+    private int numberOfIterations = 1000;
     /**
      * The position of each ant.
      */
@@ -61,6 +56,12 @@ public class AS {
      */
     private double bestTourLength;
 
+    /**
+     * Constructor.
+     *
+     * @param vertices     vertices of the graph
+     * @param numberOfAnts number of ants of the system
+     */
     public AS(Vertex[] vertices, int numberOfAnts) {
         this.graph = new Graph(vertices);
         this.bestTour = new int[graph.getNumOfVertices()];
@@ -71,113 +72,34 @@ public class AS {
     }
 
     /**
-     * @return the value of Q
+     * Constructor.
+     *
+     * @param vertices     Vertices of the graph.
+     * @param demands      Demands of the vertices.
+     * @param numberOfAnts Number of ants of the system.
+     */
+    public AS(Vertex[] vertices, int[] demands, int numberOfAnts) {
+        this.graph = new Graph(vertices, demands);
+        this.bestTour = new int[graph.getNumOfVertices()];
+        this.numberOfAnts = numberOfAnts;
+        this.ants = new Ant[numberOfAnts];
+        initializeAnts();
+        initializeAntPositions();
+    }
+
+    /**
+     * Gets the value of Q.
+     *
+     * @return The value of Q.
      */
     public static double getQ() {
         return Q;
     }
 
     /**
-     * @return the value of alpha
-     */
-    public double getAlpha() {
-        return alpha;
-    }
-
-    /**
-     * Sets the value of alpha.
+     * Prints the specific two dimensional matrix.
      *
-     * @param alpha the value of alpha
-     */
-    public void setAlpha(double alpha) {
-        this.alpha = alpha;
-    }
-
-    /**
-     * @return the value of beta
-     */
-    public double getBeta() {
-        return beta;
-    }
-
-    /**
-     * Sets the value of beta.
-     *
-     * @param beta the value of beta
-     */
-    public void setBeta(double beta) {
-        this.beta = beta;
-    }
-
-    /**
-     * @return the value of Q
-     */
-    public double getRho() {
-        return rho;
-    }
-
-    /**
-     * Sets the value of rho.
-     *
-     * @param rho the value of rho
-     */
-    public void setRho(double rho) {
-        this.rho = rho;
-    }
-
-    /**
-     * Sets the new initial tau value for the graph.
-     *
-     * @param initialTau the new initial tau value
-     */
-    public void setInitialTau(double initialTau) {
-        graph.setInitialTau(initialTau);
-    }
-
-
-
-    /**
-     * @return the number of iterations
-     */
-    public int getNumberOfIterations() {
-        return numberOfIterations;
-    }
-
-    /**
-     * Sets the number of iterations.
-     *
-     * @param numberOfIterations the new number of iterations
-     */
-    public void setNumberOfIterations(int numberOfIterations) {
-        this.numberOfIterations = numberOfIterations;
-    }
-
-    /**
-     * @param antId the id of the searched ant
-     * @return the position of the ant with the given id
-     */
-    public int getAntPosition(int antId) {
-        return antPositions[antId];
-    }
-
-    /**
-     * @return an int[] with the best tour
-     */
-    public int[] getBestTour() {
-        return bestTour;
-    }
-
-    /**
-     * @return the length of the best tour
-     */
-    public double getBestTourLength() {
-        return bestTourLength;
-    }
-
-    /**
-     * Prints the given 2D matrix.
-     *
-     * @param matrix matrix to print
+     * @param matrix Matrix to print.
      */
     public static void printMatrix(double[][] matrix) {
         for (double[] row : matrix)
@@ -186,11 +108,12 @@ public class AS {
     }
 
     /**
-     * Returns a Vertex[] with n randomly distributed vertices in a 2D grid from 0 to upper bound.
+     * Returns a Vertex[] with n randomly distributed vertices
+     * in a two dimensional grid from 0 to a specific upper bound.
      *
-     * @param n  number of vertices
-     * @param ub upper bound for the grid
-     * @return a Vertex[] with n randomly distributed vertices
+     * @param n  Number of vertices.
+     * @param ub Upper bound for the grid.
+     * @return A Vertex[] with n randomly distributed vertices.
      */
     static public Vertex[] createRandomVertices(int n, int ub) {
         Vertex[] v = new Vertex[n];
@@ -199,6 +122,115 @@ public class AS {
         for (int i = 0; i < n; i++)
             v[i] = new Vertex(rand.nextInt(ub + 1), rand.nextInt(ub + 1));
         return v;
+    }
+
+    /**
+     * Gets the value of alpha.
+     *
+     * @return The value of alpha.
+     */
+    public double getAlpha() {
+        return alpha;
+    }
+
+    /**
+     * Sets the value of alpha.
+     *
+     * @param alpha The new value of alpha.
+     */
+    public void setAlpha(double alpha) {
+        this.alpha = alpha;
+    }
+
+    /**
+     * Gets the value of beta.
+     *
+     * @return The value of beta.
+     */
+    public double getBeta() {
+        return beta;
+    }
+
+    /**
+     * Sets the value of beta.
+     *
+     * @param beta The new value of beta.
+     */
+    public void setBeta(double beta) {
+        this.beta = beta;
+    }
+
+    /**
+     * Gets the value of rho
+     *
+     * @return The value of rho.
+     */
+    public double getRho() {
+        return rho;
+    }
+
+    /**
+     * Sets the value of rho.
+     *
+     * @param rho The new value of rho.
+     */
+    public void setRho(double rho) {
+        this.rho = rho;
+    }
+
+    /**
+     * Sets the initial tau value for the graph.
+     *
+     * @param initialTau The new initial tau value.
+     */
+    public void setInitialTau(double initialTau) {
+        graph.setInitialTau(initialTau);
+    }
+
+    /**
+     * Gets the number of iterations.
+     *
+     * @return The number of iterations.
+     */
+    public int getNumberOfIterations() {
+        return numberOfIterations;
+    }
+
+    /**
+     * Sets the number of iterations.
+     *
+     * @param numberOfIterations The new number of iterations.
+     */
+    public void setNumberOfIterations(int numberOfIterations) {
+        this.numberOfIterations = numberOfIterations;
+    }
+
+    /**
+     * Gets the position of the ant with the specific id.
+     *
+     * @param antId The id of the searched ant.
+     * @return The position of the ant with the specific id.
+     */
+    public int getAntPosition(int antId) {
+        return antPositions[antId];
+    }
+
+    /**
+     * Gets the best tour.
+     *
+     * @return aAn int[] with the best tour.
+     */
+    public int[] getBestTour() {
+        return bestTour;
+    }
+
+    /**
+     * Gets the length of the best tour.
+     *
+     * @return The length of the best tour.
+     */
+    public double getBestTourLength() {
+        return bestTourLength;
     }
 
     /**
@@ -221,8 +253,8 @@ public class AS {
     /**
      * Initializes the not visited vertices for each ant.
      *
-     * @param startingVertex the starting vertex of the ant
-     * @return a list of not visited vertices for the ant
+     * @param startingVertex The starting vertex of the ant.
+     * @return A list of not visited vertices for the ant.
      */
     public List<Integer> initializeNotVisitedVertices(int startingVertex) {
         List<Integer> notVisitedVertices = new ArrayList<>();
@@ -234,11 +266,23 @@ public class AS {
     }
 
     /**
-     * Forces every ant to construct a solution.
+     * Construct solutions.
      */
     private void constructAntsSolutions() {
         for (Ant ant : ants)
             ant.run();
+    }
+
+    /**
+     * Updates the best solution.
+     */
+    private void updateSolution() {
+        for (Ant ant : ants) {
+            if (bestTourLength == 0 || ant.tourLength < bestTourLength) {
+                bestTour = ant.getTour();
+                bestTourLength = ant.tourLength;
+            }
+        }
     }
 
     /**
@@ -259,11 +303,11 @@ public class AS {
     }
 
     /**
-     * Returns the computed delta tau value oder all ants.
+     * Returns the computed delta tau value over all ants.
      *
-     * @param i current vertex
-     * @param j next vertex
-     * @return the delta tau value
+     * @param i The current vertex.
+     * @param j The next vertex.
+     * @return The delta tau value.
      */
     private double getDeltaTau(int i, int j) {
         double deltaTau = 0.0;
@@ -276,19 +320,7 @@ public class AS {
     }
 
     /**
-     * Updates the best solution.
-     */
-    private void updateSolution() {
-        for (Ant ant : ants) {
-            if (bestTourLength == 0 || ant.tourLength < bestTourLength) {
-                bestTour = ant.getTour();
-                bestTourLength = ant.tourLength;
-            }
-        }
-    }
-
-    /**
-     * Solves the Problem.
+     * Solve the Problem.
      */
     public void solve() {
         for (int i = 0; i < numberOfIterations; i++) {
