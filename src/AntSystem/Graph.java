@@ -17,14 +17,13 @@ public class Graph {
      */
     protected final double[][] distanceMatrix;
     /**
+     * Pheromone matrix of the graph.
+     */
+    protected final double[][] pheromoneMatrix;
+    /**
      * Number of vertices.
      */
     private final int numOfVertices;
-    /**
-     * Pheromone matrix of the graph.
-     */
-    private final double[][] pheromoneMatrix;
-
     /**
      * The initial tau value for the pheromone matrix.
      */

@@ -119,8 +119,12 @@ public class Ant implements Runnable {
         double sum = 0.0;   // sum of tij * nij
         // update the sum
         for (int j : notVisitedVertices) {
+            // calculate the intensity of the trail
             tij[j] = Math.pow(as.graph.getTau(currentVertex, j), as.getAlpha());
-            nij[j] = Math.pow(as.graph.getTau(currentVertex, j), as.getBeta());
+
+            // calculate the visibility of the trail, quantity = 1 / d_ij
+            nij[j] = Math.pow(1 / as.graph.getDistance(currentVertex, j), as.getBeta());
+
             sum += tij[j] * nij[j];
         }
 
@@ -137,7 +141,8 @@ public class Ant implements Runnable {
     }
 
     /**
-     * Returns an integer which represents the chosen vertex.
+     * Returns an integer which represents the selected vertex.
+     * Selects randomly a vertex with probability p_ij.
      *
      * @param probability    A double array with the probability of each vertex.
      * @param sumProbability The sum of the probabilities.

@@ -54,6 +54,16 @@ public class FileLoader implements Iterable<File> {
     }
 
     /**
+     * Gets a specific file from files[] at the index position.
+     *
+     * @param index Index position of the file.
+     * @return The specific file.
+     */
+    public File getFile(int index) {
+        return files[index];
+    }
+
+    /**
      * Makes class iterable.
      *
      * @return An Iterator for the class.

@@ -24,6 +24,10 @@ public class ProblemInstanceLoader {
      */
     private final ArrayList<Integer> demands = new ArrayList<>();
     /**
+     * The problem instance name.
+     */
+    private String name;
+    /**
      * The number of vehicles.
      */
     private int numOfVehicle;
@@ -45,22 +49,6 @@ public class ProblemInstanceLoader {
         this.file = file;
     }
 
-    // todo delete
-    public static void main(String[] args) {
-        FileLoader fl = new FileLoader("/home/tobias/Programmierung/Java/AntAlgorithm/src/" +
-                "Problem_Instances/Vrp_Set_A");
-        if (fl.loadFiles(".vrp"))
-            for (File f : fl) {
-                System.out.println(f.getName());
-                ProblemInstanceLoader problem = new ProblemInstanceLoader(f);
-                problem.loadInstance();
-                System.out.println(problem.getNumOfVehicle() + " " + problem.getCapacity() + " "
-                        + problem.getNumOfVertices());
-                System.out.println(Arrays.toString(problem.getVertices().toArray()));
-                System.out.println(Arrays.toString(problem.getDemands().toArray()));
-            }
-    }
-
     /**
      * Loads the problem instance.
      *
@@ -72,8 +60,9 @@ public class ProblemInstanceLoader {
             String delimiter = "\s";
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] values = line.split(delimiter);
+                String[] values = line.trim().split(delimiter);
                 if (values[0].equals("NAME")) {
+                    name = values[2];
                     setNumOfVehicles(values[2]);
                     continue;
                 }
@@ -87,8 +76,11 @@ public class ProblemInstanceLoader {
                 }
                 if (values[0].equals("NODE_COORD_SECTION")) {
                     while (vertices.size() < numOfVertices && (line = reader.readLine()) != null) {
-                        String[] coordinates = line.split(delimiter);
-                        vertices.add(new Vertex(Integer.parseInt(coordinates[2]), Integer.parseInt(coordinates[3])));
+                        // filters out the empty values and creates the array
+                        String[] coordinates = Arrays.stream(line.split(delimiter))
+                                .filter(value -> value != null && value.length() > 0)
+                                .toArray(String[]::new);
+                        vertices.add(new Vertex(Integer.parseInt(coordinates[1]), Integer.parseInt(coordinates[2])));
                     }
                     continue;
                 }
@@ -118,19 +110,19 @@ public class ProblemInstanceLoader {
     /**
      * Gets the vertices.
      *
-     * @return The vertices as an ArrayList<Vertex>.
+     * @return The vertices as an Vertex[].
      */
-    public ArrayList<Vertex> getVertices() {
-        return vertices;
+    public Vertex[] getVertices() {
+        return vertices.toArray(Vertex[]::new);
     }
 
     /**
      * Gets the demands.
      *
-     * @return The vertices as an ArrayList<Integer>.
+     * @return The vertices as an Integer[].
      */
-    public ArrayList<Integer> getDemands() {
-        return demands;
+    public Integer[] getDemands() {
+        return demands.toArray(Integer[]::new);
     }
 
     /**
@@ -158,5 +150,14 @@ public class ProblemInstanceLoader {
      */
     public int getNumOfVertices() {
         return numOfVertices;
+    }
+
+    /**
+     * Gets the problem instance name.
+     *
+     * @return The problem instance name.
+     */
+    public String getName() {
+        return name;
     }
 }
