@@ -1,4 +1,6 @@
-package AntSystem;
+package AntColonyOptimization.Utilities;
+
+import AntColonyOptimization.Graph.Vertex;
 
 import java.io.BufferedReader;
 import java.io.File;

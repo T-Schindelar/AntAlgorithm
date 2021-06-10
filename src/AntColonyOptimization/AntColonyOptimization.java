@@ -1,4 +1,10 @@
-package AntSystem;
+package AntColonyOptimization;
+
+import AntColonyOptimization.Ant.Ant;
+import AntColonyOptimization.Ant.ExplorationRules.AntExplorationRule;
+import AntColonyOptimization.Graph.Graph;
+import AntColonyOptimization.Utilities.ProblemInstance;
+import AntColonyOptimization.Graph.Vertex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,21 +12,21 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Ant System to solve VRPs.
+ * Ant Colony Optimization algorithm to solve VRPs.
  */
-public class AS {
+public abstract class AntColonyOptimization {
     /**
      * Q: a constant related to the quantity of trail laid by ants.
      */
     private static final double Q = 1.0;
     /**
-     * The problem to solve.
-     */
-    ProblemInstance problem;
-    /**
      * The graph which represents the environment.
      */
     private final Graph graph;
+    /**
+     * The problem to solve.
+     */
+    ProblemInstance problem;
     /**
      * Number of ants.
      */
@@ -42,6 +48,10 @@ public class AS {
      */
     private double rho = 0.1;
     /**
+     * Exploration rule of the ant.
+     */
+    private AntExplorationRule antExplorationRule;
+    /**
      * Number of Iterations.
      */
     private int numberOfIterations = 1000;
@@ -62,25 +72,11 @@ public class AS {
 
     /**
      * Constructor.
-     *
-     * @param vertices The vertices of the graph.
-     */
-    public AS(Vertex[] vertices) {
-        this.graph = new Graph(vertices);
-        this.bestTour = new int[graph.getNumOfVertices()];
-        this.numberOfAnts = graph.getNumOfVertices();
-        this.ants = new Ant[numberOfAnts];
-        initializeAnts();
-        initializeAntPositions();
-    }
-
-    /**
-     * Constructor.
      * Construct the graph and the ants and put the ants at their starting place.
      *
      * @param problem The problem to solve.
      */
-    public AS(ProblemInstance problem) {
+    public AntColonyOptimization(ProblemInstance problem) {
         this.problem = problem;
         this.graph = new Graph(problem.getVertices(), problem.getDemands());
         this.bestTour = new int[problem.getNumOfVertices()];
@@ -199,8 +195,6 @@ public class AS {
         }
     }
 
-    //todo
-
     /**
      * Updates the pheromones.
      */
@@ -217,8 +211,6 @@ public class AS {
             }
         }
     }
-
-    // todo
 
     /**
      * Returns the computed delta tau value over all ants.
@@ -408,5 +400,23 @@ public class AS {
      */
     public int getDemands(int i) {
         return graph.getDemands(i);
+    }
+
+    /**
+     * Gets the ant exploration rule.
+     *
+     * @return The specific exploration rule.
+     */
+    public AntExplorationRule getAntExplorationRule() {
+        return antExplorationRule;
+    }
+
+    /**
+     * Sets the ant exploration rule.
+     *
+     * @param antExplorationRule The new exploration rule.
+     */
+    public void setAntExplorationRule(AntExplorationRule antExplorationRule) {
+        this.antExplorationRule = antExplorationRule;
     }
 }

@@ -1,4 +1,4 @@
-package AntSystem;
+package AntColonyOptimization.Utilities;
 
 import java.io.File;
 import java.util.Arrays;

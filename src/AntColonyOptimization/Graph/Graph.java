@@ -1,7 +1,7 @@
-package AntSystem;
+package AntColonyOptimization.Graph;
 
 /**
- * Graph represents the environment for the Ant System.
+ * AntColonyOptimization.Graph represents the environment for the Ant System.
  */
 public class Graph {
     /**

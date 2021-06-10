@@ -1,17 +1,18 @@
-package AntSystem;
+package AntColonyOptimization.Ant;
+
+import AntColonyOptimization.AntColonyOptimization;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Ant for the Ant System.
  */
 public class Ant implements Runnable {
     /**
-     * The Ant System (AS) in which the ant lives.
+     * The Ant Colony Optimization algorithm.
      */
-    private final AS as;
+    private final AntColonyOptimization aco;
     /**
      * Identifier for the ant.
      */
@@ -56,17 +57,17 @@ public class Ant implements Runnable {
     /**
      * Constructor.
      *
-     * @param as       The instance of the Ant System in which the ant lives.
+     * @param aco       The instance of the Ant System in which the ant lives.
      * @param id       The id for the ant.
      * @param capacity The capacity of the ant.
      */
-    public Ant(AS as, int id, int capacity) {
+    public Ant(AntColonyOptimization aco, int id, int capacity) {
         this.id = id;
-        this.as = as;
-        this.notVisitedVertices = new ArrayList<>(as.getNumOfVertices() - 1);
-        this.feasibleVertices = new ArrayList<>(as.getNumOfVertices() - 1);
-        this.tour = new ArrayList<>(as.getNumOfVertices() + 1);
-        this.path = new int[as.getNumOfVertices()][as.getNumOfVertices()];
+        this.aco = aco;
+        this.notVisitedVertices = new ArrayList<>(aco.getNumOfVertices() - 1);
+        this.feasibleVertices = new ArrayList<>(aco.getNumOfVertices() - 1);
+        this.tour = new ArrayList<>(aco.getNumOfVertices() + 1);
+        this.path = new int[aco.getNumOfVertices()][aco.getNumOfVertices()];
         this.capacity = capacity;
     }
 
@@ -83,12 +84,12 @@ public class Ant implements Runnable {
      * Resets the ant to the starting values.
      */
     public void reset() {
-        this.currentVertex = as.getAntPosition(id);
+        this.currentVertex = aco.getAntPosition(id);
         this.tourLength = 0.0;
         this.tour.clear();
         this.numOfRoutes = 0;
-        this.notVisitedVertices = as.initializeNotVisitedVertices(currentVertex);
-        this.path = new int[as.getNumOfVertices()][as.getNumOfVertices()];
+        this.notVisitedVertices = aco.initializeNotVisitedVertices(currentVertex);
+        this.path = new int[aco.getNumOfVertices()][aco.getNumOfVertices()];
     }
 
     /**
@@ -102,7 +103,7 @@ public class Ant implements Runnable {
             feasibleVertices.addAll(notVisitedVertices);
             while (!feasibleVertices.isEmpty()) {
                 // get the next vertex
-                int nextVertex = selectNextVertex();
+                int nextVertex = aco.getAntExplorationRule().selectNextVertex(this);
 
                 // remove the next vertex from the list of not visited vertices
                 notVisitedVertices.remove((Integer) nextVertex);
@@ -112,7 +113,7 @@ public class Ant implements Runnable {
                 tour.add(nextVertex);
 
                 // increase load
-                currentLoad += as.getDemands(nextVertex);
+                currentLoad += aco.getDemands(nextVertex);
 
                 // mark the used edges
                 path[currentVertex][nextVertex] = 1;
@@ -139,64 +140,11 @@ public class Ant implements Runnable {
     }
 
     /**
-     * Returns an integer which represents the next selected vertex from the not visited vertices list.
-     * Considering the demands and the capacity.
-     *
-     * @return The next selected vertex.
-     */
-    private int selectNextVertex() {
-        double[] tij = new double[as.getNumOfVertices()];     // pheromone intensity
-        double[] nij = new double[as.getNumOfVertices()];     // visibility
-
-        double sum = 0.0;   // sum of tij * nij
-        // update the sum
-        for (int j : feasibleVertices) {
-            // calculate the intensity of the trail
-            tij[j] = Math.pow(as.getTau(currentVertex, j), as.getAlpha());
-
-            // calculate the visibility of the trail, quantity = 1 / d_ij
-            nij[j] = Math.pow(1 / as.getDistance(currentVertex, j), as.getBeta());
-
-            sum += tij[j] * nij[j];
-        }
-
-        // compute the probabilities
-        double[] probability = new double[as.getNumOfVertices()];
-        double sumProbability = 0.0;
-        for (int j : notVisitedVertices) {
-            probability[j] = (tij[j] * nij[j]) / sum;
-            sumProbability += probability[j];
-        }
-
-        // select the next vertex by probability
-        return rouletteWheelSelection(probability, sumProbability);
-    }
-
-    /**
      * Update the feasible vertices for the next selection.
      * A vertex is feasible if the additional demand does not exceed the capacity otherwise it will be removed.
      */
     private void updateFeasibleVertices() {
-        feasibleVertices.removeIf(feasibleVertex -> currentLoad + as.getDemands(feasibleVertex) > capacity);
-    }
-
-    /**
-     * Returns an integer which represents the selected vertex.
-     * Selects randomly a vertex with probability p_ij.
-     *
-     * @param probability    A double array with the probability of each vertex.
-     * @param sumProbability The sum of the probabilities.
-     * @return The selected vertex.
-     */
-    private int rouletteWheelSelection(double[] probability, double sumProbability) {
-        double randNum = new Random().nextDouble() * sumProbability;    // random number in range 0...sumProbability
-        int selection = 0;
-        double accumulatedProbability = probability[selection];
-        while (accumulatedProbability < randNum) {
-            selection++;
-            accumulatedProbability += probability[selection];
-        }
-        return selection;
+        feasibleVertices.removeIf(feasibleVertex -> currentLoad + aco.getDemands(feasibleVertex) > capacity);
     }
 
     /**
@@ -204,7 +152,7 @@ public class Ant implements Runnable {
      */
     private void computeTourLength() {
         for (int i = 0; i < tour.size() - 1; i++) {
-            tourLength += as.getDistance(tour.get(i), tour.get(i + 1));
+            tourLength += aco.getDistance(tour.get(i), tour.get(i + 1));
         }
     }
 
@@ -235,5 +183,41 @@ public class Ant implements Runnable {
      */
     public double getTourLength() {
         return tourLength;
+    }
+
+    /**
+     * Gets the ant system.
+     *
+     * @return The ant system.
+     */
+    public AntColonyOptimization getAco() {
+        return aco;
+    }
+
+    /**
+     * Gets the not visited vertices.
+     *
+     * @return The not visited vertices.
+     */
+    public List<Integer> getNotVisitedVertices() {
+        return notVisitedVertices;
+    }
+
+    /**
+     * Gets the feasible vertices.
+     *
+     * @return The feasible vertices.
+     */
+    public List<Integer> getFeasibleVertices() {
+        return feasibleVertices;
+    }
+
+    /**
+     * Gets the current vertex of teh ant.
+     *
+     * @return The current vertex.
+     */
+    public int getCurrentVertex() {
+        return currentVertex;
     }
 }
