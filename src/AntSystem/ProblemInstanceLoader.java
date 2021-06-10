@@ -15,26 +15,32 @@ public class ProblemInstanceLoader {
      * The specific file.
      */
     private final File file;
+
     /**
      * The vertices of the file.
      */
     private final ArrayList<Vertex> vertices = new ArrayList<>();
+
     /**
      * The demands for the vertices.
      */
     private final ArrayList<Integer> demands = new ArrayList<>();
+
     /**
      * The problem instance name.
      */
     private String name;
+
     /**
      * The number of vehicles.
      */
     private int numOfVehicle;
+
     /**
      * The capacity of a vehicle.
      */
-    private int capacity;
+    private int vehicleCapacity;
+
     /**
      * The number of vertices.
      */
@@ -71,7 +77,7 @@ public class ProblemInstanceLoader {
                     continue;
                 }
                 if (values[0].equals("CAPACITY")) {
-                    capacity = Integer.parseInt(values[2]);
+                    vehicleCapacity = Integer.parseInt(values[2]);
                     continue;
                 }
                 if (values[0].equals("NODE_COORD_SECTION")) {
@@ -139,8 +145,8 @@ public class ProblemInstanceLoader {
      *
      * @return The capacity of a vehicle.
      */
-    public int getCapacity() {
-        return capacity;
+    public int getVehicleCapacity() {
+        return vehicleCapacity;
     }
 
     /**
