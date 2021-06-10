@@ -14,17 +14,21 @@ public class AS {
      */
     private static final double Q = 1.0;
     /**
-     * Number of ants.
-     */
-    private final int numberOfAnts;
-    /**
-     * The ants of the Ant System.
-     */
-    private final Ant[] ants;
-    /**
      * The graph which represents the environment.
      */
     protected Graph graph;
+    /**
+     * The problem to solve.
+     */
+    ProblemInstance problem;
+    /**
+     * Number of ants.
+     */
+    private int numberOfAnts;
+    /**
+     * The ants of the Ant System.
+     */
+    private Ant[] ants;
     /**
      * Alpha: the relative importance of the trail.
      */
@@ -59,10 +63,9 @@ public class AS {
     /**
      * Constructor.
      *
-     * @param vertices     vertices of the graph
-     * @param numberOfAnts number of ants of the system
+     * @param vertices The vertices of the graph.
      */
-    public AS(Vertex[] vertices, int numberOfAnts) {
+    public AS(Vertex[] vertices) {
         this.graph = new Graph(vertices);
         this.bestTour = new int[graph.getNumOfVertices()];
         this.numberOfAnts = numberOfAnts;
@@ -73,18 +76,18 @@ public class AS {
 
     /**
      * Constructor.
+     * Construct the graph and the ants and put the ants at their starting place.
      *
-     * @param vertices     Vertices of the graph.
-     * @param demands      Demands of the vertices.
-     * @param numberOfAnts Number of ants of the system.
+     * @param problem The problem to solve.
      */
-    public AS(Vertex[] vertices, int[] demands, int numberOfAnts) {
-        this.graph = new Graph(vertices, demands);
-        this.bestTour = new int[graph.getNumOfVertices()];
-        this.numberOfAnts = numberOfAnts;
+    public AS(ProblemInstance problem) {
+        this.problem = problem;
+        this.graph = new Graph(problem.getVertices());
+        this.bestTour = new int[problem.getNumOfVertices()];
+        this.numberOfAnts = problem.getNumOfVertices();
         this.ants = new Ant[numberOfAnts];
         initializeAnts();
-        initializeAntPositions();
+        initializeAntPositionsAtDepot();
     }
 
     /**
@@ -175,6 +178,8 @@ public class AS {
      * @param rho The new value of rho.
      */
     public void setRho(double rho) {
+        if (rho < 0 || rho > 1)
+            throw new IllegalArgumentException("The value of roh has to be between 0 and 1.");
         this.rho = rho;
     }
 
@@ -204,6 +209,29 @@ public class AS {
     public void setNumberOfIterations(int numberOfIterations) {
         this.numberOfIterations = numberOfIterations;
     }
+
+    /**
+     * Gets the number of ants.
+     *
+     * @return The number of ants.
+     */
+    public int getNumberOfAnts() {
+        return numberOfAnts;
+    }
+
+    /**
+     * Sets the number of ants.
+     * Initializes the ants and puts them at their starting vertex.
+     *
+     * @param numberOfAnts The new number of ants.
+     */
+    public void setNumberOfAnts(int numberOfAnts) {
+        this.numberOfAnts = numberOfAnts;
+        ants = new Ant[numberOfAnts];
+        initializeAnts();
+        initializeAntPositionsAtDepot();
+    }
+
 
     /**
      * Gets the position of the ant with the specific id.
@@ -237,8 +265,8 @@ public class AS {
      * Initializes the ants.
      */
     private void initializeAnts() {
-        for (int k = 0; k < numberOfAnts; k++)
-            ants[k] = new Ant(this, k);
+        for (int id = 0; id < numberOfAnts; id++)
+            ants[id] = new Ant(this, id, problem.getNumOfVehicle(), problem.getVehicleCapacity());
     }
 
     /**
@@ -248,6 +276,15 @@ public class AS {
         antPositions = new int[numberOfAnts];
         for (int i = 0; i < numberOfAnts; i++)
             antPositions[i] = i % graph.getNumOfVertices();
+    }
+
+    /**
+     * Initializes the starting position for each ant at the Depot.
+     */
+    private void initializeAntPositionsAtDepot() {
+        antPositions = new int[numberOfAnts];
+        for (int i = 0; i < numberOfAnts; i++)
+            antPositions[i] = 0;
     }
 
     /**

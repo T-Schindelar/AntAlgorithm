@@ -10,7 +10,7 @@ import java.util.Arrays;
  * The ProblemInstanceLoader class loads a problem instance from a specific file,
  * to get the vertices and their demands.
  */
-public class ProblemInstanceLoader {
+public class ProblemInstance {
     /**
      * The specific file.
      */
@@ -24,7 +24,7 @@ public class ProblemInstanceLoader {
     /**
      * The demands for the vertices.
      */
-    private final ArrayList<Integer> demands = new ArrayList<>();
+    private final ArrayList<String> demands = new ArrayList<>();
 
     /**
      * The problem instance name.
@@ -51,7 +51,7 @@ public class ProblemInstanceLoader {
      *
      * @param file The specific file.
      */
-    public ProblemInstanceLoader(File file) {
+    public ProblemInstance(File file) {
         this.file = file;
     }
 
@@ -93,7 +93,7 @@ public class ProblemInstanceLoader {
                 if (values[0].equals("DEMAND_SECTION")) {
                     while (demands.size() < numOfVertices && (line = reader.readLine()) != null) {
                         String[] demand = line.split(delimiter);
-                        demands.add(Integer.parseInt(demand[1]));
+                        demands.add(demand[1]);
                     }
                 }
             }
@@ -127,8 +127,8 @@ public class ProblemInstanceLoader {
      *
      * @return The vertices as an Integer[].
      */
-    public Integer[] getDemands() {
-        return demands.toArray(Integer[]::new);
+    public int[] getDemands() {
+        return demands.stream().mapToInt(Integer::parseInt).toArray();
     }
 
     /**

@@ -21,13 +21,4 @@ public record Vertex(int x, int y) {
         return Math.round(Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2)));
 //        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
     }
-
-    // todo delete
-    @Override
-    public String toString() {
-        return "Vertex{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
-    }
 }
