@@ -316,9 +316,9 @@ public class AS {
      */
     private void updateSolution() {
         for (Ant ant : ants) {
-            if (bestTourLength == 0 || ant.tourLength < bestTourLength) {
+            if (bestTourLength == 0 || ant.getTourLength() < bestTourLength) {
                 bestTour = ant.getTour();
-                bestTourLength = ant.tourLength;
+                bestTourLength = ant.getTourLength();
             }
         }
     }
@@ -351,8 +351,8 @@ public class AS {
         double deltaTau = 0.0;
         for (Ant ant : ants) {
             // accumulate if the edge was used
-            if (ant.path[i][j] == 1)
-                deltaTau += Q / ant.tourLength;
+            if (ant.getPathValue(i,j) == 1)
+                deltaTau += Q / ant.getTourLength();
         }
         return deltaTau;
     }
