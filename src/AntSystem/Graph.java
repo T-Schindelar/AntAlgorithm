@@ -7,19 +7,19 @@ public class Graph {
     /**
      * Vertices of the graph.
      */
-    protected final Vertex[] vertices;
+    private final Vertex[] vertices;
     /**
      * Demands from the vertices.
      */
-    protected final int[] demands;
+    private final int[] demands;
     /**
      * Distance matrix of the graph.
      */
-    protected final double[][] distanceMatrix;
+    private final double[][] distanceMatrix;
     /**
      * Pheromone matrix of the graph.
      */
-    protected final double[][] pheromoneMatrix;
+    private final double[][] pheromoneMatrix;
     /**
      * Number of vertices.
      */
@@ -145,5 +145,14 @@ public class Graph {
     public void setInitialTau(double initialTau) {
         this.initialTau = initialTau;
         initializePheromoneMatrix();
+    }
+
+    /**
+     * Gets the demand of a vertex.
+     *
+     * @return Demand of vertex i.
+     */
+    public int getDemands(int i) {
+        return demands[i];
     }
 }

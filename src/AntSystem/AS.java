@@ -14,13 +14,13 @@ public class AS {
      */
     private static final double Q = 1.0;
     /**
-     * The graph which represents the environment.
-     */
-    protected Graph graph;
-    /**
      * The problem to solve.
      */
     ProblemInstance problem;
+    /**
+     * The graph which represents the environment.
+     */
+    private final Graph graph;
     /**
      * Number of ants.
      */
@@ -99,7 +99,6 @@ public class AS {
         return Q;
     }
 
-    //todo
     /**
      * Prints the specific two dimensional matrix.
      *
@@ -126,6 +125,116 @@ public class AS {
         for (int i = 0; i < n; i++)
             v[i] = new Vertex(rand.nextInt(ub + 1), rand.nextInt(ub + 1));
         return v;
+    }
+
+    /**
+     * Solve the Problem.
+     */
+    public void solve() {
+        for (int i = 0; i < numberOfIterations; i++) {
+            constructAntsSolutions();
+            updateSolution();
+            updatePheromones();
+        }
+    }
+
+    /**
+     * Initializes the ants.
+     */
+    private void initializeAnts() {
+        for (int id = 0; id < numberOfAnts; id++)
+            ants[id] = new Ant(this, id, problem.getVehicleCapacity());
+    }
+
+    /**
+     * Initializes the starting position for each ant.
+     */
+    private void initializeAntPositions() {
+        antPositions = new int[numberOfAnts];
+        for (int i = 0; i < numberOfAnts; i++)
+            antPositions[i] = i % graph.getNumOfVertices();
+    }
+
+    /**
+     * Initializes the starting position for each ant at the Depot.
+     */
+    private void initializeAntPositionsAtDepot() {
+        antPositions = new int[numberOfAnts];
+        for (int i = 0; i < numberOfAnts; i++)
+            antPositions[i] = 0;
+    }
+
+    /**
+     * Initializes the not visited vertices for each ant.
+     *
+     * @param startingVertex The starting vertex of the ant.
+     * @return A list of not visited vertices for the ant.
+     */
+    public List<Integer> initializeNotVisitedVertices(int startingVertex) {
+        List<Integer> notVisitedVertices = new ArrayList<>();
+        for (int i = 0; i < graph.getNumOfVertices(); i++) {
+            if (i != startingVertex)
+                notVisitedVertices.add(i);
+        }
+        return notVisitedVertices;
+    }
+
+    /**
+     * Construct solutions.
+     */
+    private void constructAntsSolutions() {
+        for (Ant ant : ants)
+            ant.run();
+    }
+
+    /**
+     * Updates the best solution.
+     */
+    private void updateSolution() {
+        for (Ant ant : ants) {
+            if (bestTourLength == 0 || ant.getTourLength() < bestTourLength) {
+                bestTour = ant.getTour();
+                bestTourLength = ant.getTourLength();
+            }
+        }
+    }
+
+    //todo
+
+    /**
+     * Updates the pheromones.
+     */
+    private void updatePheromones() {
+        for (int i = 0; i < graph.getNumOfVertices(); i++) {
+            for (int j = i + 1; j < graph.getNumOfVertices(); j++) {
+                // do evaporation
+                graph.setTau(i, j, (1 - rho) * graph.getTau(i, j));
+                graph.setTau(j, i, graph.getTau(i, j));
+
+                // do deposit
+                graph.setTau(i, j, graph.getTau(i, j) + getDeltaTau(i, j));
+                graph.setTau(j, i, graph.getTau(i, j));
+            }
+        }
+    }
+
+    // todo
+
+    /**
+     * Returns the computed delta tau value over all ants.
+     *
+     * @param i The current vertex.
+     * @param j The next vertex.
+     * @return The delta tau value.
+     */
+    private double getDeltaTau(int i, int j) {
+        double deltaTau = 0.0;
+        for (Ant ant : ants) {
+            // accumulate if the edge was used
+            if (ant.getPathValue(i, j) == 1)
+                deltaTau += Q / ant.getTourLength();
+        }
+        return deltaTau;
     }
 
     /**
@@ -233,7 +342,6 @@ public class AS {
         initializeAntPositionsAtDepot();
     }
 
-
     /**
      * Gets the position of the ant with the specific id.
      *
@@ -263,108 +371,42 @@ public class AS {
     }
 
     /**
-     * Initializes the ants.
-     */
-    private void initializeAnts() {
-        for (int id = 0; id < numberOfAnts; id++)
-            ants[id] = new Ant(this, id, problem.getVehicleCapacity());
-    }
-
-    /**
-     * Initializes the starting position for each ant.
-     */
-    private void initializeAntPositions() {
-        antPositions = new int[numberOfAnts];
-        for (int i = 0; i < numberOfAnts; i++)
-            antPositions[i] = i % graph.getNumOfVertices();
-    }
-
-    /**
-     * Initializes the starting position for each ant at the Depot.
-     */
-    private void initializeAntPositionsAtDepot() {
-        antPositions = new int[numberOfAnts];
-        for (int i = 0; i < numberOfAnts; i++)
-            antPositions[i] = 0;
-    }
-
-    /**
-     * Initializes the not visited vertices for each ant.
+     * Gets the number of vertices of the graph.
      *
-     * @param startingVertex The starting vertex of the ant.
-     * @return A list of not visited vertices for the ant.
+     * @return Number of vertices of the graph.
      */
-    public List<Integer> initializeNotVisitedVertices(int startingVertex) {
-        List<Integer> notVisitedVertices = new ArrayList<>();
-        for (int i = 0; i < graph.getNumOfVertices(); i++) {
-            if (i != startingVertex)
-                notVisitedVertices.add(i);
-        }
-        return notVisitedVertices;
+    public int getNumOfVertices() {
+        return graph.getNumOfVertices();
     }
 
     /**
-     * Construct solutions.
-     */
-    private void constructAntsSolutions() {
-        for (Ant ant : ants)
-            ant.run();
-    }
-
-    /**
-     * Updates the best solution.
-     */
-    private void updateSolution() {
-        for (Ant ant : ants) {
-            if (bestTourLength == 0 || ant.getTourLength() < bestTourLength) {
-                bestTour = ant.getTour();
-                bestTourLength = ant.getTourLength();
-            }
-        }
-    }
-
-    /**
-     * Updates the pheromones.
-     */
-    private void updatePheromones() {
-        for (int i = 0; i < graph.getNumOfVertices(); i++) {
-            for (int j = i + 1; j < graph.getNumOfVertices(); j++) {
-                // do evaporation
-                graph.setTau(i, j, (1 - rho) * graph.getTau(i, j));
-                graph.setTau(j, i, graph.getTau(i, j));
-
-                // do deposit
-                graph.setTau(i, j, graph.getTau(i, j) + getDeltaTau(i, j));
-                graph.setTau(j, i, graph.getTau(i, j));
-            }
-        }
-    }
-
-    /**
-     * Returns the computed delta tau value over all ants.
+     * Gets the distance for the edge(i,j).
      *
      * @param i The current vertex.
      * @param j The next vertex.
-     * @return The delta tau value.
+     * @return Distance for the edge(i,j).
      */
-    private double getDeltaTau(int i, int j) {
-        double deltaTau = 0.0;
-        for (Ant ant : ants) {
-            // accumulate if the edge was used
-            if (ant.getPathValue(i,j) == 1)
-                deltaTau += Q / ant.getTourLength();
-        }
-        return deltaTau;
+    public double getDistance(int i, int j) {
+        return graph.getDistance(i, j);
     }
 
     /**
-     * Solve the Problem.
+     * Gets the pheromone value of the edge(i,j).
+     *
+     * @param i The current vertex.
+     * @param j The next vertex.
+     * @return Pheromone value of the edge(i,j).
      */
-    public void solve() {
-        for (int i = 0; i < numberOfIterations; i++) {
-            constructAntsSolutions();
-            updateSolution();
-            updatePheromones();
-        }
+    public double getTau(int i, int j) {
+        return graph.getTau(i, j);
+    }
+
+    /**
+     * Gets the demand of a vertex.
+     *
+     * @return Demand of vertex i.
+     */
+    public int getDemands(int i) {
+        return graph.getDemands(i);
     }
 }

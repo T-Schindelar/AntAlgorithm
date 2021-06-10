@@ -15,27 +15,22 @@ public class ProblemInstance {
      * The specific file.
      */
     private final File file;
-
     /**
      * The vertices of the file.
      */
     private final ArrayList<Vertex> vertices = new ArrayList<>();
-
     /**
      * The demands for the vertices.
      */
     private final ArrayList<String> demands = new ArrayList<>();
-
     /**
      * The problem instance name.
      */
     private String name;
-
     /**
      * The capacity of a vehicle.
      */
     private int vehicleCapacity;
-
     /**
      * The number of vertices.
      */

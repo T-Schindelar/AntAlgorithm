@@ -41,7 +41,7 @@ public class Ant implements Runnable {
      */
     private List<Integer> notVisitedVertices;
     /**
-     * The lenght of the tour.
+     * The length of the tour.
      */
     private double tourLength;
     /**
@@ -53,7 +53,6 @@ public class Ant implements Runnable {
      */
     private int numOfRoutes;
 
-
     /**
      * Constructor.
      *
@@ -64,10 +63,10 @@ public class Ant implements Runnable {
     public Ant(AS as, int id, int capacity) {
         this.id = id;
         this.as = as;
-        this.notVisitedVertices = new ArrayList<>(as.graph.getNumOfVertices() - 1);
-        this.feasibleVertices = new ArrayList<>(as.graph.getNumOfVertices() - 1);
-        this.tour = new ArrayList<>(as.graph.getNumOfVertices() + 1);
-        this.path = new int[as.graph.getNumOfVertices()][as.graph.getNumOfVertices()];
+        this.notVisitedVertices = new ArrayList<>(as.getNumOfVertices() - 1);
+        this.feasibleVertices = new ArrayList<>(as.getNumOfVertices() - 1);
+        this.tour = new ArrayList<>(as.getNumOfVertices() + 1);
+        this.path = new int[as.getNumOfVertices()][as.getNumOfVertices()];
         this.capacity = capacity;
     }
 
@@ -89,7 +88,7 @@ public class Ant implements Runnable {
         this.tour.clear();
         this.numOfRoutes = 0;
         this.notVisitedVertices = as.initializeNotVisitedVertices(currentVertex);
-        this.path = new int[as.graph.getNumOfVertices()][as.graph.getNumOfVertices()];
+        this.path = new int[as.getNumOfVertices()][as.getNumOfVertices()];
     }
 
     /**
@@ -113,7 +112,7 @@ public class Ant implements Runnable {
                 tour.add(nextVertex);
 
                 // increase load
-                currentLoad += as.graph.demands[nextVertex];
+                currentLoad += as.getDemands(nextVertex);
 
                 // mark the used edges
                 path[currentVertex][nextVertex] = 1;
@@ -146,23 +145,23 @@ public class Ant implements Runnable {
      * @return The next selected vertex.
      */
     private int selectNextVertex() {
-        double[] tij = new double[as.graph.getNumOfVertices()];     // pheromone intensity
-        double[] nij = new double[as.graph.getNumOfVertices()];     // visibility
+        double[] tij = new double[as.getNumOfVertices()];     // pheromone intensity
+        double[] nij = new double[as.getNumOfVertices()];     // visibility
 
         double sum = 0.0;   // sum of tij * nij
         // update the sum
         for (int j : feasibleVertices) {
             // calculate the intensity of the trail
-            tij[j] = Math.pow(as.graph.getTau(currentVertex, j), as.getAlpha());
+            tij[j] = Math.pow(as.getTau(currentVertex, j), as.getAlpha());
 
             // calculate the visibility of the trail, quantity = 1 / d_ij
-            nij[j] = Math.pow(1 / as.graph.getDistance(currentVertex, j), as.getBeta());
+            nij[j] = Math.pow(1 / as.getDistance(currentVertex, j), as.getBeta());
 
             sum += tij[j] * nij[j];
         }
 
         // compute the probabilities
-        double[] probability = new double[as.graph.getNumOfVertices()];
+        double[] probability = new double[as.getNumOfVertices()];
         double sumProbability = 0.0;
         for (int j : notVisitedVertices) {
             probability[j] = (tij[j] * nij[j]) / sum;
@@ -178,7 +177,7 @@ public class Ant implements Runnable {
      * A vertex is feasible if the additional demand does not exceed the capacity otherwise it will be removed.
      */
     private void updateFeasibleVertices() {
-        feasibleVertices.removeIf(feasibleVertex -> currentLoad + as.graph.demands[feasibleVertex] > capacity);
+        feasibleVertices.removeIf(feasibleVertex -> currentLoad + as.getDemands(feasibleVertex) > capacity);
     }
 
     /**
@@ -205,7 +204,7 @@ public class Ant implements Runnable {
      */
     private void computeTourLength() {
         for (int i = 0; i < tour.size() - 1; i++) {
-            tourLength += as.graph.getDistance(tour.get(i), tour.get(i + 1));
+            tourLength += as.getDistance(tour.get(i), tour.get(i + 1));
         }
     }
 
