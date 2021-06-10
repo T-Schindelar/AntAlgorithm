@@ -1,6 +1,6 @@
-import AntSystem.AS;
-import AntSystem.FileLoader;
-import AntSystem.ProblemInstance;
+import AntColonyOptimization.AntColonySystem;
+import AntColonyOptimization.Utilities.FileLoader;
+import AntColonyOptimization.Utilities.ProblemInstance;
 
 import java.io.File;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * Test the Ant Colony Optimization.
  */
-public class TestAS {
+public class RunACS {
     public static void main(String[] args) {
 //        testAllFiles();
         testFile(0);
@@ -24,26 +24,27 @@ public class TestAS {
                 problem.loadInstance();
 
                 // initialize the Ant System
-                AS as = new AS(problem);
+                AntColonySystem acs = new AntColonyOptimization.AntColonySystem(problem);
 
                 // set parameter
-                as.setNumberOfIterations(1);
-                as.setAlpha(1);
-                as.setBeta(1);
-                as.setRho(0.1);
-                as.setInitialTau(0.01);
+                acs.setNumberOfIterations(100);
+                acs.setAlpha(1);
+                acs.setBeta(1);
+                acs.setRho(0.01);
+                acs.setInitialTau(0.01);
+                acs.setQ0(0.5);
 
                 // solve and measure time
                 System.out.println(problem.getName());
                 System.out.println("Solving, please wait...");
                 long start = System.currentTimeMillis();
-                as.solve();
+                acs.solve();
                 long finish = System.currentTimeMillis();
                 long compTime = finish - start;
 
                 // print result
-                System.out.println(Arrays.toString(as.getBestTour()));
-                System.out.println(as.getBestTourLength());
+                System.out.println(Arrays.toString(acs.getBestTour()));
+                System.out.println(acs.getBestTourLength());
                 System.out.printf("compTime: %f s \n", compTime / 1000.0);
             }
     }
@@ -59,26 +60,27 @@ public class TestAS {
         problem.loadInstance();
 
         // initialize the Ant System
-        AS as = new AS(problem);
+        AntColonySystem acs = new AntColonySystem(problem);
 
         // set parameter
-        as.setNumberOfIterations(1);
-        as.setAlpha(1);
-        as.setBeta(1);
-        as.setRho(0.1);
-        as.setInitialTau(0.01);
+        acs.setNumberOfIterations(100);
+        acs.setAlpha(1);
+        acs.setBeta(1);
+        acs.setRho(0.01);
+        acs.setInitialTau(0.01);
+        acs.setQ0(0.5);
 
         // solve and measure time
         System.out.println(problem.getName());
         System.out.println("Solving, please wait...");
         long start = System.currentTimeMillis();
-        as.solve();
+        acs.solve();
         long finish = System.currentTimeMillis();
         long compTime = finish - start;
 
         // print result
-        System.out.println(Arrays.toString(as.getBestTour()));
-        System.out.println(as.getBestTourLength());
+        System.out.println(Arrays.toString(acs.getBestTour()));
+        System.out.println(acs.getBestTourLength());
         System.out.printf("compTime: %f s \n", compTime / 1000.0);
     }
 }
