@@ -32,11 +32,6 @@ public class ProblemInstance {
     private String name;
 
     /**
-     * The number of vehicles.
-     */
-    private int numOfVehicle;
-
-    /**
      * The capacity of a vehicle.
      */
     private int vehicleCapacity;
@@ -69,7 +64,6 @@ public class ProblemInstance {
                 String[] values = line.trim().split(delimiter);
                 if (values[0].equals("NAME")) {
                     name = values[2];
-                    setNumOfVehicles(values[2]);
                     continue;
                 }
                 if (values[0].equals("DIMENSION")) {
@@ -104,16 +98,6 @@ public class ProblemInstance {
     }
 
     /**
-     * Sets the number of vehicles.
-     *
-     * @param string The string which contains the number of vehicles.
-     */
-    private void setNumOfVehicles(String string) {
-        String[] splittedString = string.split("k");
-        numOfVehicle = Integer.parseInt(splittedString[1]);
-    }
-
-    /**
      * Gets the vertices.
      *
      * @return The vertices as an Vertex[].
@@ -129,15 +113,6 @@ public class ProblemInstance {
      */
     public int[] getDemands() {
         return demands.stream().mapToInt(Integer::parseInt).toArray();
-    }
-
-    /**
-     * Gets the number of vehicles of this problem instance.
-     *
-     * @return The number of vehicles.
-     */
-    public int getNumOfVehicle() {
-        return numOfVehicle;
     }
 
     /**

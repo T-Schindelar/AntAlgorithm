@@ -68,7 +68,7 @@ public class AS {
     public AS(Vertex[] vertices) {
         this.graph = new Graph(vertices);
         this.bestTour = new int[graph.getNumOfVertices()];
-        this.numberOfAnts = numberOfAnts;
+        this.numberOfAnts = graph.getNumOfVertices();
         this.ants = new Ant[numberOfAnts];
         initializeAnts();
         initializeAntPositions();
@@ -82,7 +82,7 @@ public class AS {
      */
     public AS(ProblemInstance problem) {
         this.problem = problem;
-        this.graph = new Graph(problem.getVertices());
+        this.graph = new Graph(problem.getVertices(), problem.getDemands());
         this.bestTour = new int[problem.getNumOfVertices()];
         this.numberOfAnts = problem.getNumOfVertices();
         this.ants = new Ant[numberOfAnts];
@@ -99,6 +99,7 @@ public class AS {
         return Q;
     }
 
+    //todo
     /**
      * Prints the specific two dimensional matrix.
      *
@@ -266,7 +267,7 @@ public class AS {
      */
     private void initializeAnts() {
         for (int id = 0; id < numberOfAnts; id++)
-            ants[id] = new Ant(this, id, problem.getNumOfVehicle(), problem.getVehicleCapacity());
+            ants[id] = new Ant(this, id, problem.getVehicleCapacity());
     }
 
     /**
