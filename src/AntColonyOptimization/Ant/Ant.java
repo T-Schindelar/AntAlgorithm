@@ -3,7 +3,6 @@ package AntColonyOptimization.Ant;
 import AntColonyOptimization.AntColonyOptimization;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Ant for the Ant System.
@@ -24,11 +23,11 @@ public class Ant implements Runnable {
     /**
      * A List of feasible vertices for the next selection.
      */
-    private final List<Integer> feasibleVertices;
+    private final ArrayList<Integer> feasibleVertices;
     /**
      * The created Tour of the ant.
      */
-    private final List<Integer> tour;
+    private ArrayList<Integer> tour;
     /**
      * Current vertex.
      */
@@ -40,7 +39,7 @@ public class Ant implements Runnable {
     /**
      * The List of not visited vertices.
      */
-    private List<Integer> notVisitedVertices;
+    private ArrayList<Integer> notVisitedVertices;
     /**
      * The length of the tour.
      */
@@ -57,7 +56,7 @@ public class Ant implements Runnable {
     /**
      * Constructor.
      *
-     * @param aco       The instance of the Ant System in which the ant lives.
+     * @param aco      The instance of the Ant System in which the ant lives.
      * @param id       The id for the ant.
      * @param capacity The capacity of the ant.
      */
@@ -104,6 +103,10 @@ public class Ant implements Runnable {
             while (!feasibleVertices.isEmpty()) {
                 // get the next vertex
                 int nextVertex = aco.getAntExplorationRule().selectNextVertex(this);
+
+                // performs the pheromone update rule if available
+                if (aco.getAntPheromoneRule() != null)
+                    aco.getAntPheromoneRule().updateTau(currentVertex, nextVertex);
 
                 // remove the next vertex from the list of not visited vertices
                 notVisitedVertices.remove((Integer) nextVertex);
@@ -157,6 +160,18 @@ public class Ant implements Runnable {
     }
 
     /**
+     * Clone an ant to save the best solution.
+     */
+    public Ant clone() {
+        Ant ant = new Ant(aco, id, capacity);
+        ant.tour = new ArrayList<>(tour);
+        ant.tourLength = tourLength;
+        ant.path = path.clone();
+
+        return ant;
+    }
+
+    /**
      * Gets the value of path at position i, j.
      *
      * @param i Row i.
@@ -199,7 +214,7 @@ public class Ant implements Runnable {
      *
      * @return The not visited vertices.
      */
-    public List<Integer> getNotVisitedVertices() {
+    public ArrayList<Integer> getNotVisitedVertices() {
         return notVisitedVertices;
     }
 
@@ -208,12 +223,12 @@ public class Ant implements Runnable {
      *
      * @return The feasible vertices.
      */
-    public List<Integer> getFeasibleVertices() {
+    public ArrayList<Integer> getFeasibleVertices() {
         return feasibleVertices;
     }
 
     /**
-     * Gets the current vertex of teh ant.
+     * Gets the current vertex of the ant.
      *
      * @return The current vertex.
      */

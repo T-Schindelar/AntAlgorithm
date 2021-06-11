@@ -2,23 +2,21 @@ package AntColonyOptimization;
 
 import AntColonyOptimization.Ant.Ant;
 import AntColonyOptimization.Ant.ExplorationRules.AntExplorationRule;
-import AntColonyOptimization.Graph.Graph;
-import AntColonyOptimization.Utilities.ProblemInstance;
-import AntColonyOptimization.Graph.Vertex;
+import AntColonyOptimization.Ant.PheromoneRules.AntPheromoneRule;
+import AntColonyOptimization.DepositRules.DepositRule;
+import Graph.Graph;
+import Utilities.ProblemInstance;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 /**
- * Ant Colony Optimization algorithm to solve VRPs.
+ * Ant Colony Optimization algorithm to solve CVRPs.
  */
 public abstract class AntColonyOptimization {
     /**
      * Q: a constant related to the quantity of trail laid by ants.
      */
-    private static final double Q = 1.0;
+    public static final double Q = 1.0;
     /**
      * The graph which represents the environment.
      */
@@ -32,7 +30,7 @@ public abstract class AntColonyOptimization {
      */
     private int numberOfAnts;
     /**
-     * The ants of the Ant System.
+     * The ants of the System.
      */
     private Ant[] ants;
     /**
@@ -44,13 +42,21 @@ public abstract class AntColonyOptimization {
      */
     private double beta = 1.0;
     /**
-     * Rho: trail persistence(1-ρ can be interpreted as trail evaporation).
+     * Rho: trail persistence (1 - ρ can be interpreted as trail evaporation).
      */
     private double rho = 0.1;
     /**
      * Exploration rule of the ant.
      */
     private AntExplorationRule antExplorationRule;
+    /**
+     * The ant deposit rule
+     */
+    private AntPheromoneRule antPheromoneRule;
+    /**
+     * Deposit rule of the system to update the pheromones.
+     */
+    private DepositRule depositRule;
     /**
      * Number of Iterations.
      */
@@ -61,14 +67,9 @@ public abstract class AntColonyOptimization {
     private int[] antPositions;
 
     /**
-     * The best tour found.
+     * The ant with the best tour.
      */
-    private int[] bestTour;
-
-    /**
-     * The length of the best tour
-     */
-    private double bestTourLength;
+    private Ant bestAnt;
 
     /**
      * Constructor.
@@ -79,48 +80,10 @@ public abstract class AntColonyOptimization {
     public AntColonyOptimization(ProblemInstance problem) {
         this.problem = problem;
         this.graph = new Graph(problem.getVertices(), problem.getDemands());
-        this.bestTour = new int[problem.getNumOfVertices()];
         this.numberOfAnts = problem.getNumOfVertices();
         this.ants = new Ant[numberOfAnts];
         initializeAnts();
         initializeAntPositionsAtDepot();
-    }
-
-    /**
-     * Gets the value of Q.
-     *
-     * @return The value of Q.
-     */
-    public static double getQ() {
-        return Q;
-    }
-
-    /**
-     * Prints the specific two dimensional matrix.
-     *
-     * @param matrix Matrix to print.
-     */
-    public static void printMatrix(double[][] matrix) {
-        for (double[] row : matrix)
-            System.out.println(Arrays.toString(row));
-        System.out.println();
-    }
-
-    /**
-     * Returns a Vertex[] with n randomly distributed vertices
-     * in a two dimensional grid from 0 to a specific upper bound.
-     *
-     * @param n  Number of vertices.
-     * @param ub Upper bound for the grid.
-     * @return A Vertex[] with n randomly distributed vertices.
-     */
-    static public Vertex[] createRandomVertices(int n, int ub) {
-        Vertex[] v = new Vertex[n];
-        Random rand = new Random();
-        rand.setSeed(0);
-        for (int i = 0; i < n; i++)
-            v[i] = new Vertex(rand.nextInt(ub + 1), rand.nextInt(ub + 1));
-        return v;
     }
 
     /**
@@ -166,8 +129,8 @@ public abstract class AntColonyOptimization {
      * @param startingVertex The starting vertex of the ant.
      * @return A list of not visited vertices for the ant.
      */
-    public List<Integer> initializeNotVisitedVertices(int startingVertex) {
-        List<Integer> notVisitedVertices = new ArrayList<>();
+    public ArrayList<Integer> initializeNotVisitedVertices(int startingVertex) {
+        ArrayList<Integer> notVisitedVertices = new ArrayList<>();
         for (int i = 0; i < graph.getNumOfVertices(); i++) {
             if (i != startingVertex)
                 notVisitedVertices.add(i);
@@ -188,9 +151,8 @@ public abstract class AntColonyOptimization {
      */
     private void updateSolution() {
         for (Ant ant : ants) {
-            if (bestTourLength == 0 || ant.getTourLength() < bestTourLength) {
-                bestTour = ant.getTour();
-                bestTourLength = ant.getTourLength();
+            if (bestAnt == null || ant.getTourLength() < bestAnt.getTourLength()) {
+                bestAnt = ant.clone();
             }
         }
     }
@@ -203,30 +165,14 @@ public abstract class AntColonyOptimization {
             for (int j = i + 1; j < graph.getNumOfVertices(); j++) {
                 // do evaporation
                 graph.setTau(i, j, (1 - rho) * graph.getTau(i, j));
-                graph.setTau(j, i, graph.getTau(i, j));
 
                 // do deposit
-                graph.setTau(i, j, graph.getTau(i, j) + getDeltaTau(i, j));
+                graph.setTau(i, j, depositRule.getNewTau(i, j));
+
+                // set symmetric tau
                 graph.setTau(j, i, graph.getTau(i, j));
             }
         }
-    }
-
-    /**
-     * Returns the computed delta tau value over all ants.
-     *
-     * @param i The current vertex.
-     * @param j The next vertex.
-     * @return The delta tau value.
-     */
-    private double getDeltaTau(int i, int j) {
-        double deltaTau = 0.0;
-        for (Ant ant : ants) {
-            // accumulate if the edge was used
-            if (ant.getPathValue(i, j) == 1)
-                deltaTau += Q / ant.getTourLength();
-        }
-        return deltaTau;
     }
 
     /**
@@ -266,7 +212,7 @@ public abstract class AntColonyOptimization {
     }
 
     /**
-     * Gets the value of rho
+     * Gets the value of rho.
      *
      * @return The value of rho.
      */
@@ -280,13 +226,22 @@ public abstract class AntColonyOptimization {
      * @param rho The new value of rho.
      */
     public void setRho(double rho) {
-        if (rho < 0 || rho > 1)
-            throw new IllegalArgumentException("The value of roh has to be between 0 and 1.");
+        if (rho < 0 || rho >= 1)
+            throw new IllegalArgumentException("The value of rho has to be between 0 and 1.");
         this.rho = rho;
     }
 
     /**
-     * Sets the initial tau value for the graph.
+     * Gets the initial tau value of the graph.
+     *
+     * @return The value of the initial tau of the graph.
+     */
+    public double getInitialTau() {
+        return graph.getInitialTau();
+    }
+
+    /**
+     * Sets the initial tau value of the graph.
      *
      * @param initialTau The new initial tau value.
      */
@@ -347,10 +302,10 @@ public abstract class AntColonyOptimization {
     /**
      * Gets the best tour.
      *
-     * @return aAn int[] with the best tour.
+     * @return An int[] with the best tour.
      */
     public int[] getBestTour() {
-        return bestTour;
+        return bestAnt.getTour();
     }
 
     /**
@@ -359,7 +314,7 @@ public abstract class AntColonyOptimization {
      * @return The length of the best tour.
      */
     public double getBestTourLength() {
-        return bestTourLength;
+        return bestAnt.getTourLength();
     }
 
     /**
@@ -394,6 +349,17 @@ public abstract class AntColonyOptimization {
     }
 
     /**
+     * Sets the tau value of the edge(i,j).
+     *
+     * @param i     The current vertex.
+     * @param j     The next vertex.
+     * @param value The new pheromone value of the edge(i,j).
+     */
+    public void setTau(int i, int j, double value) {
+        graph.setTau(i, j, value);
+    }
+
+    /**
      * Gets the demand of a vertex.
      *
      * @return Demand of vertex i.
@@ -418,5 +384,59 @@ public abstract class AntColonyOptimization {
      */
     public void setAntExplorationRule(AntExplorationRule antExplorationRule) {
         this.antExplorationRule = antExplorationRule;
+    }
+
+    /**
+     * Gets the pheromone update rule for an ant.
+     *
+     * @return The specific pheromone rule.
+     */
+    public AntPheromoneRule getAntPheromoneRule() {
+        return antPheromoneRule;
+    }
+
+    /**
+     * Sets the pheromone update rule for an ant.
+     *
+     * @param antPheromoneRule The specific pheromone rule.
+     */
+    public void setAntPheromoneRule(AntPheromoneRule antPheromoneRule) {
+        this.antPheromoneRule = antPheromoneRule;
+    }
+
+    /**
+     * Gets the deposit rule of the system.
+     *
+     * @return The specific deposit rule.
+     */
+    public DepositRule getDepositRule() {
+        return depositRule;
+    }
+
+    /**
+     * Sets the deposit rule of the system.
+     *
+     * @param depositRule The new deposit rule.
+     */
+    public void setDepositRule(DepositRule depositRule) {
+        this.depositRule = depositRule;
+    }
+
+    /**
+     * Gets the best ant.
+     *
+     * @return The best ant.
+     */
+    public Ant getBestAnt() {
+        return bestAnt;
+    }
+
+    /**
+     * Gets the ants.
+     *
+     * @return The ants of the system.
+     */
+    public Ant[] getAnts() {
+        return ants;
     }
 }

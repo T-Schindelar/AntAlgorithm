@@ -1,7 +1,7 @@
-package AntColonyOptimization.Graph;
+package Graph;
 
 /**
- * AntColonyOptimization.Graph represents the environment for the Ant System.
+ * Graph represents the environment.
  */
 public class Graph {
     /**
@@ -28,21 +28,6 @@ public class Graph {
      * The initial tau value for the pheromone matrix.
      */
     private double initialTau = 0.1;
-
-    /**
-     * Constructor.
-     *
-     * @param vertices Vertices of the graph.
-     */
-    public Graph(Vertex[] vertices) {
-        this.vertices = vertices;
-        this.demands = null;
-        this.numOfVertices = vertices.length;
-        this.distanceMatrix = new double[numOfVertices][numOfVertices];
-        this.pheromoneMatrix = new double[numOfVertices][numOfVertices];
-        initializePheromoneMatrix();
-        initializeDistanceMatrix();
-    }
 
     /**
      * Constructor.

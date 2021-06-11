@@ -1,4 +1,4 @@
-package AntColonyOptimization.Graph;
+package Graph;
 
 /**
  * Vertex for a graph.

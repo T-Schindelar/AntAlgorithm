@@ -1,6 +1,6 @@
-package AntColonyOptimization.Utilities;
+package Utilities;
 
-import AntColonyOptimization.Graph.Vertex;
+import Graph.Vertex;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,12 +1,12 @@
 import AntColonyOptimization.AntSystem;
-import AntColonyOptimization.Utilities.FileLoader;
-import AntColonyOptimization.Utilities.ProblemInstance;
+import Utilities.FileLoader;
+import Utilities.ProblemInstance;
 
 import java.io.File;
 import java.util.Arrays;
 
 /**
- * Test the Ant Colony Optimization.
+ * Runs the Ant System algorithm.
  */
 public class RunAS {
     public static void main(String[] args) {
@@ -30,8 +30,8 @@ public class RunAS {
                 antSystem.setNumberOfIterations(100);
                 antSystem.setAlpha(1);
                 antSystem.setBeta(1);
-                antSystem.setRho(0.01);
-                antSystem.setInitialTau(0.01);
+                antSystem.setRho(0.1);
+                antSystem.setInitialTau(0.1);
 
                 // solve and measure time
                 System.out.println(problem.getName());
@@ -65,8 +65,8 @@ public class RunAS {
         antSystem.setNumberOfIterations(100);
         antSystem.setAlpha(1);
         antSystem.setBeta(1);
-        antSystem.setRho(0.01);
-        antSystem.setInitialTau(0.01);
+        antSystem.setRho(0.1);
+        antSystem.setInitialTau(0.1);
 
         // solve and measure time
         System.out.println(problem.getName());
