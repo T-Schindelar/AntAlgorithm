@@ -11,6 +11,10 @@
 # iml file
 *.iml
 
+# exclude directories
+/src/Files/Detailed_Results
+/src/Files/Summarized_Results
+
 # exclude files
 *.pdf
 *.jpg

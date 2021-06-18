@@ -15,7 +15,7 @@ public class AntColonySystem extends AntSystem {
      */
     private double q0;
     /**
-     * Phi: evaporation after each step of an ant.
+     * Phi: evaporation rate after each step of an ant.
      */
     private double phi;
 

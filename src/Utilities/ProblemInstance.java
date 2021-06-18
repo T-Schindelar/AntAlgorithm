@@ -39,6 +39,11 @@ public class ProblemInstance {
     private int numOfVertices;
 
     /**
+     * The optimal value for this problem.
+     */
+    private int optimalValue;
+
+    /**
      * Constructor.
      *
      * @param file The specific file.
@@ -61,6 +66,10 @@ public class ProblemInstance {
                 String[] values = line.trim().split(delimiter);
                 if (values[0].equals("NAME")) {
                     name = values[2];
+                    continue;
+                }
+                if (values[0].equals("COMMENT")) {
+                    optimalValue = Integer.parseInt(values[values.length - 1].replace(")",""));
                     continue;
                 }
                 if (values[0].equals("DIMENSION")) {
@@ -137,5 +146,14 @@ public class ProblemInstance {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets the optimal value for the problem
+     *
+     * @return The optimal value.
+     */
+    public int getOptimalValue() {
+        return optimalValue;
     }
 }
