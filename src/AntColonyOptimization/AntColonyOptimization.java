@@ -190,6 +190,8 @@ public abstract class AntColonyOptimization {
      * @param alpha The new value of alpha.
      */
     public void setAlpha(double alpha) {
+        if (alpha < 0)
+            throw new IllegalArgumentException("The value of alpha has to be greater than 0");
         this.alpha = alpha;
     }
 
@@ -208,6 +210,8 @@ public abstract class AntColonyOptimization {
      * @param beta The new value of beta.
      */
     public void setBeta(double beta) {
+        if (beta < 0)
+            throw new IllegalArgumentException("The value of beta has to be greater than 0");
         this.beta = beta;
     }
 
@@ -227,7 +231,7 @@ public abstract class AntColonyOptimization {
      */
     public void setRho(double rho) {
         if (rho < 0 || rho >= 1)
-            throw new IllegalArgumentException("The value of rho has to be between 0 and 1.");
+            throw new IllegalArgumentException("The value of rho has to be between 0 and 1, including 0.");
         this.rho = rho;
     }
 
@@ -246,6 +250,8 @@ public abstract class AntColonyOptimization {
      * @param initialTau The new initial tau value.
      */
     public void setInitialTau(double initialTau) {
+        if (initialTau <= 0)
+            throw new IllegalArgumentException("The initial tau has to be greater than 0");
         graph.setInitialTau(initialTau);
     }
 
@@ -264,6 +270,8 @@ public abstract class AntColonyOptimization {
      * @param numberOfIterations The new number of iterations.
      */
     public void setNumberOfIterations(int numberOfIterations) {
+        if (numberOfIterations < 0)
+            throw new IllegalArgumentException("The number of iterations has to be greater than 0");
         this.numberOfIterations = numberOfIterations;
     }
 
@@ -283,6 +291,8 @@ public abstract class AntColonyOptimization {
      * @param numberOfAnts The new number of ants.
      */
     public void setNumberOfAnts(int numberOfAnts) {
+        if (numberOfAnts < 0)
+            throw new IllegalArgumentException("The number of ants has to be greater than 0");
         this.numberOfAnts = numberOfAnts;
         ants = new Ant[numberOfAnts];
         initializeAnts();

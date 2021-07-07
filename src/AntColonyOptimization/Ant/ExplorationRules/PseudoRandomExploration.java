@@ -45,7 +45,7 @@ public class PseudoRandomExploration extends RandomExploration {
 
         for (int j : ant.getFeasibleVertices()) {
             // calculate the intensity of the trail
-            double tij = Math.pow(ant.getAco().getTau(ant.getCurrentVertex(), j), ant.getAco().getAlpha());
+            double tij = ant.getAco().getTau(ant.getCurrentVertex(), j);
 
             // calculate the visibility of the trail, quantity = 1 / d_ij
             double nij = Math.pow(1 / ant.getAco().getDistance(ant.getCurrentVertex(), j), ant.getAco().getBeta());

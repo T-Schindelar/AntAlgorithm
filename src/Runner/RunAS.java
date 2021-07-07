@@ -90,7 +90,7 @@ public class RunAS extends RunAlgorithm {
             antSystem.setInitialTau(tau0);
             antSystem.setNumberOfIterations(numIt);
 
-            // TODO: 13.06.21  
+            // TODO: 13.06.21 Zeitmessung anpassen ms oder s
             // solve and measure time
             Instant start = Instant.now();
             antSystem.solve();

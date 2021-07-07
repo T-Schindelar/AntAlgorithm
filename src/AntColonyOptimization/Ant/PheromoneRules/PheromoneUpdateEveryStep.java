@@ -7,20 +7,12 @@ import AntColonyOptimization.AntColonyOptimization;
  */
 public class PheromoneUpdateEveryStep extends AntPheromoneRule {
     /**
-     * Phi: evaporation after each step of an ant.
-     */
-    private final double phi;
-
-    /**
-     * /**
      * Constructor.
      *
      * @param aco The ant colony optimization algorithm.
-     * @param phi The value of phi.
      */
-    public PheromoneUpdateEveryStep(AntColonyOptimization aco, double phi) {
+    public PheromoneUpdateEveryStep(AntColonyOptimization aco) {
         super(aco);
-        this.phi = phi;
     }
 
     /**
@@ -29,7 +21,7 @@ public class PheromoneUpdateEveryStep extends AntPheromoneRule {
     @Override
     public void updateTau(int i, int j) {
         // calculate and set tau
-        aco.setTau(i, j, (1 - phi) * aco.getTau(i, j) + phi * aco.getInitialTau());
+        aco.setTau(i, j, (1 - aco.getRho()) * aco.getTau(i, j) + aco.getRho() * aco.getInitialTau());
 
         // set symmetric tau
         aco.setTau(j, i, aco.getTau(i, j));

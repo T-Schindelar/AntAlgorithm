@@ -16,29 +16,22 @@ public class RunACS extends RunAS {
      * Probability to select with the deterministic rule.
      */
     private final double q0;
-    /**
-     * Phi: evaporation rate after each step of an ant.
-     */
-    private final double phi;
 
     /**
      * Constructor.
      *
      * @param directory      The directory of the files.
      * @param numOfSolutions Number of solutions to build for one problem.
-     * @param alpha          The alpha value.
      * @param beta           The beta value.
      * @param rho            The rho value.
      * @param tau0           The tau0 value.
      * @param numIt          The number of iterations value.
      * @param q0             The Probability to select with the deterministic rule.
-     * @param phi            The evaporation rate after each step of an ant.
      */
-    public RunACS(String directory, int numOfSolutions, double alpha, double beta, double rho, double tau0,
-                  int numIt, double q0, double phi) {
-        super(directory, numOfSolutions, alpha, beta, rho, tau0, numIt);
+    public RunACS(String directory, int numOfSolutions, double beta, double rho, double tau0,
+                  int numIt, double q0) {
+        super(directory, numOfSolutions, 1, beta, rho, tau0, numIt);
         this.q0 = q0;
-        this.phi = phi;
     }
 
     /**
@@ -57,10 +50,9 @@ public class RunACS extends RunAS {
 
         // initialize writer
         Writer writer = new Writer(directory + "Detailed_Results/ACS/", problem.getName());
-        writer.setHead("problem; " + "alpha" + "; " + "beta" + "; " + "rho" + "; " + "tau0" + "; " +
-                "iterations" + "; " + "q0" + "; " + "phi");
-        writer.addRecordToBody(problem.getName() + "; " + alpha + "; " + beta + "; " + rho + "; " + tau0 + "; " +
-                numIt + "; " + q0 + "; " + phi);
+        writer.setHead("problem; " + "beta" + "; " + "rho" + "; " + "tau0" + "; " + "q0" + "; " + "iterations");
+        writer.addRecordToBody(problem.getName() + "; " + beta + "; " + rho + "; " + tau0 + "; " + +q0 + "; " +
+                numIt);
         writer.addRecordToBody("");
         writer.addRecordToBody("nr; solution value; computation time in sec");
 
@@ -73,15 +65,14 @@ public class RunACS extends RunAS {
             AntColonySystem antColonySystem = new AntColonySystem(problem);
 
             // set parameter
-            antColonySystem.setAlpha(alpha);
+            antColonySystem.setAlpha(1);
             antColonySystem.setBeta(beta);
             antColonySystem.setRho(rho);
             antColonySystem.setInitialTau(tau0);
             antColonySystem.setNumberOfIterations(numIt);
             antColonySystem.setQ0(q0);
-            antColonySystem.setPhi(phi);
 
-            // TODO: 13.06.21  
+            // TODO: 13.06.21 Zeitmessung anpassen ms oder s
             // solve and measure time
             Instant start = Instant.now();
             antColonySystem.solve();

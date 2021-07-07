@@ -21,7 +21,7 @@ public class FileLoader implements Iterable<File> {
     /**
      * Constructor.
      *
-     * @param directory directory of the files
+     * @param directory The directory of the files
      */
     public FileLoader(String directory) {
         this.directory = directory;
