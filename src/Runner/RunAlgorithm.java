@@ -3,6 +3,7 @@ package Runner;
 import Utilities.FileLoader;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Runs a specific algorithm to solve the problem.
@@ -33,6 +34,10 @@ public abstract class RunAlgorithm {
      * The lower bound of the solutions.
      */
     protected int lowerBound = Integer.MAX_VALUE;
+    /**
+     * List of the computed solutions.
+     */
+    protected ArrayList<Double> solutionValues = new ArrayList<>();
     /**
      * The sum of all solution values.
      */
@@ -100,6 +105,7 @@ public abstract class RunAlgorithm {
     public void reset() {
         upperBound = Integer.MIN_VALUE;
         lowerBound = Integer.MAX_VALUE;
+        solutionValues = new ArrayList<>(numOfSolutions);
         sumSolutionValues = 0;
         sumComputationTime = 0;
     }
@@ -164,5 +170,25 @@ public abstract class RunAlgorithm {
     public double getRelativeGapBetweenBounds() {
         double gap = (upperBound - lowerBound) / (double) lowerBound * 100;
         return roundToNDecimalPlaces(gap, 2);
+    }
+
+    /**
+     * Gets the variance of the solutions.
+     *
+     * @return The variance.
+     */
+    private double getVariance() {
+        double avg = getAvgSolutionValue();
+        return solutionValues.stream().mapToDouble(v -> Math.pow(v - avg, 2)).sum() / numOfSolutions;
+    }
+
+    /**
+     * Gets the standard deviation of the solutions.
+     * Rounded to two decimal places.
+     *
+     * @return The standard deviation rounded to two decimal places.
+     */
+    public double getStandardDeviation() {
+        return roundToNDecimalPlaces(Math.sqrt(getVariance()), 2);
     }
 }

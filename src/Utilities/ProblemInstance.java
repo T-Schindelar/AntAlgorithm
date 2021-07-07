@@ -73,11 +73,11 @@ public class ProblemInstance {
                     continue;
                 }
                 if (values[0].equals("DIMENSION")) {
-                    numOfVertices = Integer.parseInt(values[2]);
+                    numOfVertices = Integer.parseInt(values[values.length-1]);
                     continue;
                 }
                 if (values[0].equals("CAPACITY")) {
-                    vehicleCapacity = Integer.parseInt(values[2]);
+                    vehicleCapacity = Integer.parseInt(values[values.length-1]);
                     continue;
                 }
                 if (values[0].equals("NODE_COORD_SECTION")) {

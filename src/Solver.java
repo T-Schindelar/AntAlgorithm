@@ -17,7 +17,7 @@ public class Solver {
         double rho = 0.1;
         double tau0 = 0.1;
         double q0 = 0.5;
-        int numIt = 1000;
+        int numIt = 100;
 
         // runs the Ant System
         RunAS runAS = new RunAS(directoryOfTheFiles, numOfSolutions, alpha, beta, rho, tau0, numIt);

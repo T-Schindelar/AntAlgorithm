@@ -98,6 +98,7 @@ public class RunAS extends RunAlgorithm {
             long compTime = Duration.between(start, finish).toMillis();
 
             // save results
+            solutionValues.add(antSystem.getBestTourLength());
             sumSolutionValues += antSystem.getBestTourLength();
             sumComputationTime += compTime;
 
@@ -118,15 +119,15 @@ public class RunAS extends RunAlgorithm {
 
         // resets the file and sets the heading
         if (!summarizedFileHasHead) {
-            writer.setHead("problem; optimal value; avg. results; gap in %; lower bound; upper bound; gap in %; " +
-                    "avg. comp. time;");
+            writer.setHead("problem; optimal value; avg. results; gap in %; lower bound; upper bound;" +
+                    " standard deviation; avg. comp. time;");
             summarizedFileHasHead = true;
             append = false;
         }
 
         writer.addRecordToBody(problem.getName() + "; " + optimalValue + "; " + getAvgSolutionValue() +
                 "; " + getRelativeGapToOpt() + "; " + lowerBound + "; " + upperBound +
-                "; " + getRelativeGapBetweenBounds() + "; " + getAvgComputationTime());
+                "; " + getStandardDeviation() + "; " + getAvgComputationTime());
         writer.write(append);
     }
 }
