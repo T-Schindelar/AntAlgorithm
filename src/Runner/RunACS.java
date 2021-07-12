@@ -65,7 +65,6 @@ public class RunACS extends RunAS {
             AntColonySystem antColonySystem = new AntColonySystem(problem);
 
             // set parameter
-            antColonySystem.setAlpha(1);
             antColonySystem.setBeta(beta);
             antColonySystem.setRho(rho);
             antColonySystem.setInitialTau(tau0);

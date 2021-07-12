@@ -104,7 +104,7 @@ public class Ant implements Runnable {
                 // get the next vertex
                 int nextVertex = aco.getAntExplorationRule().selectNextVertex(this);
 
-                // performs the pheromone update rule if available
+                // performs the local pheromone update rule if available
                 if (aco.getAntPheromoneRule() != null)
                     aco.getAntPheromoneRule().updateTau(currentVertex, nextVertex);
 

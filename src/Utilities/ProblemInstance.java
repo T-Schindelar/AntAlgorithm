@@ -60,12 +60,12 @@ public class ProblemInstance {
     public boolean loadInstance() {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            String delimiter = "\s";
+            String delimiter = "\t|\\s";
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] values = line.trim().split(delimiter);
                 if (values[0].equals("NAME")) {
-                    name = values[2];
+                    name = values[values.length - 1];
                     continue;
                 }
                 if (values[0].equals("COMMENT")) {

@@ -51,7 +51,7 @@ public class RandomExploration extends AntExplorationRule {
         // compute the probabilities
         double[] probability = new double[ant.getAco().getNumOfVertices()];
         double sumProbability = 0.0;
-        for (int j : ant.getNotVisitedVertices()) {
+        for (int j : ant.getFeasibleVertices()) {
             probability[j] = (tij[j] * nij[j]) / sum;
             sumProbability += probability[j];
         }
