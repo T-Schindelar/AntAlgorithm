@@ -10,6 +10,7 @@ public class Solver {
         int toIndex = 0;
         int numOfSolutions = 10;
         String directoryOfTheFiles = "src/Files/";
+        String dataSet = "Vrp_Set_Thesis";
 
         // parameter
         double alpha = 1;
@@ -17,22 +18,22 @@ public class Solver {
         double rho = 0.1;
         double tau0 = 0.1;
         double q0 = 0.5;
-        int numIt = 1000;
+        int numIt = 100;
 
         // runs the Ant System
-        RunAS runAS = new RunAS(directoryOfTheFiles, numOfSolutions, alpha, beta, rho, tau0, numIt);
+        RunAS runAS = new RunAS(directoryOfTheFiles, dataSet, numOfSolutions, alpha, beta, rho, tau0, numIt);
          runAS.solveAllFiles();
 //        for (int i = 0; i <= toIndex; i++)
 //            runAS.solveOneFile(i);
 
         // runs the Ant Colony System
-        RunACS runACS = new RunACS(directoryOfTheFiles, numOfSolutions, beta, rho, tau0, numIt, q0);
+        RunACS runACS = new RunACS(directoryOfTheFiles, dataSet, numOfSolutions, beta, rho, tau0, numIt, q0);
          runACS.solveAllFiles();
 //        for (int i = 0; i <= toIndex; i++)
 //            runACS.solveOneFile(i);
 
         // runs the nearest neighbour heuristic
-        RunNNH runNNH = new RunNNH(directoryOfTheFiles);
+        RunNNH runNNH = new RunNNH(directoryOfTheFiles, dataSet);
         runNNH.solveAllFiles();
 //        for (int i = 0; i <= toIndex; i++)
 //            runNNH.solveOneFile(i);

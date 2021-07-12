@@ -15,6 +15,11 @@ public abstract class RunAlgorithm {
     protected String directory;
 
     /**
+     * The name of the problem instances data set.
+     */
+    private final String dataSet;
+
+    /**
      * Describes whether summarized file has a head.
      */
     protected boolean summarizedFileHasHead = false;
@@ -51,10 +56,12 @@ public abstract class RunAlgorithm {
      * Constructor.
      *
      * @param directory      The directory of the files.
+     * @param dataSet        The name of the problem data set.
      * @param numOfSolutions Number of solutions to build for one problem.
      */
-    public RunAlgorithm(String directory, int numOfSolutions) {
+    public RunAlgorithm(String directory, String dataSet, int numOfSolutions) {
         this.directory = directory;
+        this.dataSet = dataSet;
         this.numOfSolutions = numOfSolutions;
     }
 
@@ -75,7 +82,7 @@ public abstract class RunAlgorithm {
      */
     public void solveAllFiles() {
         // load the problem files
-        FileLoader fileLoader = new FileLoader(directory + "Problem_Instances/Vrp_Set_A");
+        FileLoader fileLoader = new FileLoader(directory + "Problem_Instances/" + dataSet);
         fileLoader.loadFiles(".vrp");
 
         // solve all files
@@ -88,7 +95,7 @@ public abstract class RunAlgorithm {
      */
     public void solveOneFile(int index) {
         // load the problem files
-        FileLoader fileLoader = new FileLoader(directory + "Problem_Instances/Vrp_Set_A");
+        FileLoader fileLoader = new FileLoader(directory + "Problem_Instances/" + dataSet);
         fileLoader.loadFiles(".vrp");
 
         solveOneFile(fileLoader.getFile(index));

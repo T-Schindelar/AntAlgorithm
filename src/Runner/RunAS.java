@@ -44,8 +44,8 @@ public class RunAS extends RunAlgorithm {
      * @param tau0           The tau0 value.
      * @param numIt          The number of iterations value.
      */
-    public RunAS(String directory, int numOfSolutions, double alpha, double beta, double rho, double tau0, int numIt) {
-        super(directory, numOfSolutions);
+    public RunAS(String directory, String dataSet, int numOfSolutions, double alpha, double beta, double rho, double tau0, int numIt) {
+        super(directory, dataSet, numOfSolutions);
         this.alpha = alpha;
         this.beta = beta;
         this.rho = rho;

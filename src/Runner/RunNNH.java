@@ -17,8 +17,8 @@ public class RunNNH extends RunAlgorithm {
      *
      * @param directory The directory of the files.
      */
-    public RunNNH(String directory) {
-        super(directory, 1);
+    public RunNNH(String directory, String dataSet) {
+        super(directory, dataSet, 1);
     }
 
     /**

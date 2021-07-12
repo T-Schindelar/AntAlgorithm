@@ -28,9 +28,9 @@ public class RunACS extends RunAS {
      * @param numIt          The number of iterations value.
      * @param q0             The Probability to select with the deterministic rule.
      */
-    public RunACS(String directory, int numOfSolutions, double beta, double rho, double tau0,
+    public RunACS(String directory, String dataSet, int numOfSolutions, double beta, double rho, double tau0,
                   int numIt, double q0) {
-        super(directory, numOfSolutions, 1, beta, rho, tau0, numIt);
+        super(directory, dataSet, numOfSolutions, 1, beta, rho, tau0, numIt);
         this.q0 = q0;
     }
 
