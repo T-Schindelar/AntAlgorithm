@@ -40,7 +40,7 @@ public class RunNNH extends RunAlgorithm {
         writer.setHead("problem; optimal value");
         writer.addRecordToBody(problem.getName() + "; " + optimalValue);
         writer.addRecordToBody("");
-        writer.addRecordToBody("nr; solution value; gap in %; computation time in sec");
+        writer.addRecordToBody("solution value; gap in %; computation time in sec");
 
         // console output as user information
         System.out.println("Solving " + problem.getName() + ", please wait...");
@@ -59,7 +59,7 @@ public class RunNNH extends RunAlgorithm {
         sumSolutionValues += nnh.getTourLength();
 
         // write result
-        writer.addRecordToBody("1; " + (int) nnh.getTourLength() + "; " + getRelativeGapToOpt() + "; " +
+        writer.addRecordToBody((int) nnh.getTourLength() + "; " + getRelativeGapToOpt() + "; " +
                 compTime);
         writer.write();
     }

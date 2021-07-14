@@ -49,9 +49,10 @@ public class RunACS extends RunAS {
         setOptimalValue(problem.getOptimalValue());
 
         // initialize writer
-        Writer writer = new Writer(directory + "Detailed_Results/ACS/", problem.getName());
+        Writer writer = new Writer(directory + "Detailed_Results/ACS/", problem.getName() +
+                "_beta" + beta + "_rho" + rho + "_tau0" + tau0 + "_q0" + q0 + "_it" + numIt);
         writer.setHead("problem; " + "beta" + "; " + "rho" + "; " + "tau0" + "; " + "q0" + "; " + "iterations");
-        writer.addRecordToBody(problem.getName() + "; " + beta + "; " + rho + "; " + tau0 + "; " + +q0 + "; " +
+        writer.addRecordToBody(problem.getName() + "; " + beta + "; " + rho + "; " + tau0 + "; " + q0 + "; " +
                 numIt);
         writer.addRecordToBody("");
         writer.addRecordToBody("nr; solution value; computation time in sec");
@@ -95,7 +96,8 @@ public class RunACS extends RunAS {
         writer.write();
 
         // write summary
-        writer = new Writer(directory + "Summarized_Results/", "summarized_results_acs");
+        writer = new Writer(directory + "Summarized_Results/", "summarized_results_acs" +
+                "_beta" + beta + "_rho" + rho + "_tau0" + tau0 + "_q0" + q0 + "_it" + numIt);
         boolean append = true;
 
         // resets the file and sets the heading

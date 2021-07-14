@@ -68,7 +68,8 @@ public class RunAS extends RunAlgorithm {
         setOptimalValue(problem.getOptimalValue());
 
         // initialize writer
-        Writer writer = new Writer(directory + "Detailed_Results/AS/", problem.getName());
+        Writer writer = new Writer(directory + "Detailed_Results/AS/", problem.getName() +
+                "_alpha" + alpha + "_beta" + beta + "_rho" + rho + "_tau0" + tau0 + "_it" + numIt);
         writer.setHead("problem; " + "alpha" + "; " + "beta" + "; " + "rho" + "; " + "tau0" + "; " + "iterations");
         writer.addRecordToBody(problem.getName() + "; " + alpha + "; " + beta + "; " + rho + "; " + tau0 + "; " +
                 numIt);
@@ -114,7 +115,8 @@ public class RunAS extends RunAlgorithm {
         writer.write();
 
         // write summary
-        writer = new Writer(directory + "Summarized_Results/", "summarized_results_as");
+        writer = new Writer(directory + "Summarized_Results/", "summarized_results_as" +
+                "_alpha" + alpha + "_beta" + beta + "_rho" + rho + "_tau0" + tau0 + "_it" + numIt);
         boolean append = true;
 
         // resets the file and sets the heading
