@@ -1,5 +1,5 @@
 problem; optimal value
 X-n110-k13; 14971
 
-nr; solution value; gap in %; computation time in sec
-1; 19292; 28.86; 1
+solution value; gap in %; computation time in sec
+19292; 28.86; 0.003
