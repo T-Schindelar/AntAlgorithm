@@ -6,25 +6,27 @@ import java.util.HashMap;
 
 /**
  * The main application to solve the problems.
+ * Solving with all procedures.
  */
 public class Solver {
     public static void main(String[] args) {
-        int toIndex = 5;
+        // general settings
         int numOfSolutions = 10;
         String directoryOfTheFiles = "src/Files/";
-        String dataSet = "Vrp_Set_X";
+        String dataSet = "Vrp_Set_A";
 
         // parameter
         double alpha, beta, rho, tau0, q0;
         int numIt;
 
+        // parameter setting to run
         HashMap<String, double[]> parameterDict = new HashMap<>();
-        parameterDict.put("alpha", new double[]{1d, 2d, 5d});
-        parameterDict.put("beta", new double[]{1d, 2d, 5d});
-        parameterDict.put("rho", new double[]{0.1, 0.3, 0.6});
+        parameterDict.put("alpha", new double[]{1d, 0d, 2d, 5d});
+        parameterDict.put("beta", new double[]{1d, 0d, 2d, 5d});
+        parameterDict.put("rho", new double[]{0.1, 0.3, 0.6, 0, 9});
         parameterDict.put("tau0", new double[]{0.1, 0.01, 1d, 5d});
         parameterDict.put("q0", new double[]{0.5, 0.25, 0.75});
-        parameterDict.put("numIt", new double[]{250d, 10d, 50d, 100d, 250d, 1000d, 2000d});
+        parameterDict.put("numIt", new double[]{100d, 10d, 50d, 250d, 500d, 1000d, 2000d});
 
         for (String parameter : parameterDict.keySet()) {
             alpha = parameterDict.get("alpha")[0];
@@ -83,23 +85,23 @@ public class Solver {
             }
         }
         // runs the nearest neighbour heuristic
-        new RunNNH(directoryOfTheFiles, dataSet);
+        new RunNNH(directoryOfTheFiles, dataSet).solveAllFiles();
     }
 
     /**
      * Solves the problem instances from zero to the specific index.
-     * Solving with all Methods.
+     * Solving with all procedures.
      *
-     * @param toIndex The specific index.
-     * @param numOfSolutions The Number of Solutions for each instance.
+     * @param toIndex             The specific index.
+     * @param numOfSolutions      The Number of Solutions for each instance.
      * @param directoryOfTheFiles The directory of the files.
-     * @param dataSet The dataset to solve.
-     * @param alpha The alpha value.
-     * @param beta The beta value.
-     * @param rho The rho value.
-     * @param tau0 The initial tau value.
-     * @param q0 The q0 value.
-     * @param numIt The number of iterations value.
+     * @param dataSet             The dataset to solve.
+     * @param alpha               The alpha value.
+     * @param beta                The beta value.
+     * @param rho                 The rho value.
+     * @param tau0                The initial tau value.
+     * @param q0                  The q0 value.
+     * @param numIt               The number of iterations value.
      */
     private static void solveToIndex(int toIndex, int numOfSolutions, String directoryOfTheFiles, String dataSet, double alpha,
                                      double beta, double rho, double tau0, double q0, int numIt) {

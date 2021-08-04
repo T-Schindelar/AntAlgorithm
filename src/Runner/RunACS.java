@@ -72,7 +72,6 @@ public class RunACS extends RunAS {
             antColonySystem.setNumberOfIterations(numIt);
             antColonySystem.setQ0(q0);
 
-            // TODO: 13.06.21 Zeitmessung anpassen ms oder s
             // solve and measure time
             Instant start = Instant.now();
             antColonySystem.solve();

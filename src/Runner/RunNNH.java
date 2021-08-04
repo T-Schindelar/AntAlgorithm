@@ -48,7 +48,6 @@ public class RunNNH extends RunAlgorithm {
         // initialize the nearest neighbor heuristic
         NearestNeighborHeuristic nnh = new NearestNeighborHeuristic(problem);
 
-        // TODO: 13.06.21 Zeitmessung anpassen ms oder s
         // solve and measure time
         Instant start = Instant.now();
         nnh.solve();
