@@ -18,6 +18,7 @@ public class PseudoRandomExploration extends RandomExploration {
      * Constructor.
      *
      * @param antSelectionRule The selection rule.
+     * @param q0               The probability to select with the deterministic rule.
      */
     public PseudoRandomExploration(AntSelectionRule antSelectionRule, double q0) {
         super(antSelectionRule);

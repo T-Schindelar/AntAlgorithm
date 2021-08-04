@@ -9,6 +9,11 @@ import java.util.HashMap;
  * Solving with all procedures.
  */
 public class Solver {
+    /**
+     * The main function of the solver.
+     *
+     * @param args The user arguments.
+     */
     public static void main(String[] args) {
         // general settings
         int numOfSolutions = 10;

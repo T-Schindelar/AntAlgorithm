@@ -10,15 +10,13 @@ import java.util.ArrayList;
  */
 public abstract class RunAlgorithm {
     /**
-     * The directory of the files.
-     */
-    protected String directory;
-
-    /**
      * The name of the problem instances data set.
      */
     private final String dataSet;
-
+    /**
+     * The directory of the files.
+     */
+    protected String directory;
     /**
      * Describes whether summarized file has a head.
      */
@@ -92,6 +90,8 @@ public abstract class RunAlgorithm {
 
     /**
      * Solves the problem of the given index.
+     *
+     * @param index The index of the file to solve.
      */
     public void solveOneFile(int index) {
         // load the problem files
@@ -103,6 +103,8 @@ public abstract class RunAlgorithm {
 
     /**
      * Solves the problem of the given file.
+     *
+     * @param file The file to solve.
      */
     public abstract void solveOneFile(File file);
 

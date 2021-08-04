@@ -21,6 +21,7 @@ public class RunACS extends RunAS {
      * Constructor.
      *
      * @param directory      The directory of the files.
+     * @param dataSet        The dataset to solve.
      * @param numOfSolutions Number of solutions to build for one problem.
      * @param beta           The beta value.
      * @param rho            The rho value.

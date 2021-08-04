@@ -37,6 +37,7 @@ public class RunAS extends RunAlgorithm {
      * Constructor.
      *
      * @param directory      The directory of the files.
+     * @param dataSet        The dataset to solve.
      * @param numOfSolutions Number of solutions to build for one problem.
      * @param alpha          The alpha value.
      * @param beta           The beta value.
@@ -44,7 +45,8 @@ public class RunAS extends RunAlgorithm {
      * @param tau0           The tau0 value.
      * @param numIt          The number of iterations value.
      */
-    public RunAS(String directory, String dataSet, int numOfSolutions, double alpha, double beta, double rho, double tau0, int numIt) {
+    public RunAS(String directory, String dataSet, int numOfSolutions, double alpha, double beta, double rho,
+                 double tau0, int numIt) {
         super(directory, dataSet, numOfSolutions);
         this.alpha = alpha;
         this.beta = beta;

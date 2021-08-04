@@ -9,8 +9,17 @@ import java.util.ArrayList;
  * Write a .csv file.
  */
 public class Writer {
+    /**
+     * The file to write.
+     */
     private final File file;
+    /**
+     * The content body of the file.
+     */
     private final ArrayList<String> body = new ArrayList<>();
+    /**
+     * The content header of the file.
+     */
     private String head;
 
     /**

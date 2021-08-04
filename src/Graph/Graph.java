@@ -135,6 +135,7 @@ public class Graph {
     /**
      * Gets the demand of a vertex.
      *
+     * @param i The vertex.
      * @return Demand of vertex i.
      */
     public int getDemands(int i) {

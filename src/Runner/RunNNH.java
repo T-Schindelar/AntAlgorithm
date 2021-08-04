@@ -16,6 +16,7 @@ public class RunNNH extends RunAlgorithm {
      * Constructor.
      *
      * @param directory The directory of the files.
+     * @param dataSet   The dataset to solve.
      */
     public RunNNH(String directory, String dataSet) {
         super(directory, dataSet, 1);
