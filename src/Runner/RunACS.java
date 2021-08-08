@@ -103,7 +103,7 @@ public class RunACS extends RunAS {
         // resets the file and sets the heading
         if (!summarizedFileHasHead) {
             writer.setHead("problem; optimal value; avg. results; gap in %; lower bound; upper bound;" +
-                    " standard deviation; avg. comp. time;");
+                    " standard deviation; avg. comp. time");
             summarizedFileHasHead = true;
             append = false;
         }

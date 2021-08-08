@@ -57,10 +57,26 @@ public class RunNNH extends RunAlgorithm {
 
         // save result
         sumSolutionValues += nnh.getTourLength();
+        sumComputationTime += compTime;
 
         // write result
-        writer.addRecordToBody((int) nnh.getTourLength() + "; " + getRelativeGapToOpt() + "; " +
-                compTime);
+        writer.addRecordToBody((int) nnh.getTourLength() + "; " + getRelativeGapToOpt() + "; "
+                + getAvgComputationTime());
         writer.write();
+
+        // write summary
+        writer = new Writer(directory + "Summarized_Results/", "summarized_results_nnh");
+        boolean append = true;
+
+        // resets the file and sets the heading
+        if (!summarizedFileHasHead) {
+            writer.setHead("problem; optimal value; result; gap in %; avg. comp. time");
+            summarizedFileHasHead = true;
+            append = false;
+        }
+
+        writer.addRecordToBody(problem.getName() + "; " + optimalValue + "; " + getAvgSolutionValue() +
+                "; " + getRelativeGapToOpt() + "; " + getAvgComputationTime());
+        writer.write(append);
     }
 }
